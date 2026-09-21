@@ -513,6 +513,7 @@
 
     <div class="sub-panel" id="subpanel-games">
       <div id="adminGames"></div>
+      <datalist id="venueSuggestions"></datalist>
       <div class="cal-btn" id="adminAddGameBtn">+ Lisää ottelu</div>
     </div>
 
@@ -573,8 +574,7 @@ function gamesForPlayer(name) {
 }
 
 function venueNameOf(g) {
-  const parts = (g.opponent || '').split('/');
-  return parts.length > 1 ? parts[parts.length - 1].trim() : '';
+  return (g.venue || '').trim();
 }
 
 function venueAddressOf(g) {
@@ -646,10 +646,11 @@ function renderGameCard(g, opts) {
   const timesStr = formatTimes(g);
   const timeHtml = timesStr ? `<span class="game-time">🕐 ${escapeHtml(timesStr)}</span>` : '';
 
+  const venueName = venueNameOf(g);
   const address = venueAddressOf(g);
   const venueHtml = address
     ? `<a class="venue-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}" target="_blank" rel="noopener">📍 ${escapeHtml(address)}</a>`
-    : '';
+    : (venueName ? `<span class="venue-link" style="color:var(--muted); cursor:default;">📍 ${escapeHtml(venueName)}</span>` : '');
 
   const typeLineHtml = g.roster.length
     ? `${escapeHtml(g.type)} &middot; ${g.roster.length} pelaajaa`
@@ -917,7 +918,22 @@ document.getElementById('teamCalBtn').addEventListener('click', () => {
 // ---- Admin: Firebase login, edit forms, save & export ----
 // ==================================================================
 
+function normalizeGames() {
+  DATA.games.forEach(g => {
+    if (g.venue === undefined) {
+      const parts = (g.opponent || '').split('/');
+      if (parts.length > 1) {
+        g.venue = parts.pop().trim();
+        g.opponent = parts.join('/').trim();
+      } else {
+        g.venue = '';
+      }
+    }
+  });
+}
+
 function refreshAll() {
+  normalizeGames();
   rebuildGameIndex();
   DATA.games.sort(dateSort);
   // rebuild player <select> options (names may have changed)
@@ -1000,8 +1016,12 @@ function renderAdminGames() {
             <input type="text" value="${escapeHtml(g.date)}" placeholder="26.9." data-admin-game-field="date" data-game-id="${g.id}">
           </div>
           <div class="admin-field">
-            <label>Vastustaja / paikka</label>
-            <input type="text" value="${escapeHtml(g.opponent)}" placeholder="Ilves/Kangasala" data-admin-game-field="opponent" data-game-id="${g.id}">
+            <label>Vastustaja</label>
+            <input type="text" value="${escapeHtml(g.opponent)}" placeholder="Ilves" data-admin-game-field="opponent" data-game-id="${g.id}">
+          </div>
+          <div class="admin-field">
+            <label>Kenttä</label>
+            <input type="text" value="${escapeHtml(g.venue || '')}" placeholder="Kangasala" list="venueSuggestions" data-admin-game-field="venue" data-game-id="${g.id}">
           </div>
         </div>
         <div class="admin-row">
@@ -1046,6 +1066,11 @@ function renderAdminGames() {
       </div>
     `;
   }).join('');
+
+  const datalist = document.getElementById('venueSuggestions');
+  if (datalist) {
+    datalist.innerHTML = allVenueNames().map(v => `<option value="${escapeHtml(v)}"></option>`).join('');
+  }
 }
 
 function renderAdminVenues() {
@@ -1214,7 +1239,7 @@ document.getElementById('adminGames').addEventListener('click', (e) => {
 
 document.getElementById('adminAddGameBtn').addEventListener('click', () => {
   const id = 'g' + Date.now();
-  const g = { id, date: '', opponent: '', color: 'SININEN', type: 'Pienpelit', roster: [], goalies_in_game: [], times: ['', ''], played: false };
+  const g = { id, date: '', opponent: '', venue: '', color: 'SININEN', type: 'Pienpelit', roster: [], goalies_in_game: [], times: ['', ''], played: false };
   DATA.games.push(g);
   gameById[id] = g;
   refreshAll();
