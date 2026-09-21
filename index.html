@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KISA U11 Syksy 2026 - Peliohjelma</title>
+<style>
+  :root {
+    --blue: #1e5fbf;
+    --white-team: #999;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --border: #e0e2e6;
+    --text: #1a1c20;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+  }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab {
+    flex: 1;
+    padding: 10px 12px;
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .tab.active { background: var(--blue); color: white; border-color: var(--blue); }
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .game-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .game-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .game-date { font-weight: 700; font-size: 1.05rem; }
+  .badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    color: white;
+    white-space: nowrap;
+  }
+  .badge.SININEN { background: var(--blue); }
+  .badge.VALKOINEN { background: #b8b8b8; color: #222; }
+  .game-opp { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+  .game-type { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+  .roster-toggle {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--blue);
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+  .roster {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .roster.show { display: block; }
+  .roster-player {
+    display: inline-block;
+    background: #eef2f7;
+    border-radius: 8px;
+    padding: 3px 9px;
+    margin: 2px 3px 2px 0;
+  }
+  .roster-player.goalie { background: #fde68a; }
+  .player-meta {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .empty { color: var(--muted); font-size: 0.9rem; padding: 20px 0; text-align: center; }
+  .section-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 18px 0 8px;
+  }
+  .section-label:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<h1>KISA U11 - Peliohjelma syksy 2026</h1>
+<div class="sub">Lohko 2a (SININEN) ja Lohko 2b (VALKOINEN)</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="player">Pelaajan mukaan</div>
+  <div class="tab" data-tab="team">Joukkueen mukaan</div>
+</div>
+
+<div class="panel active" id="panel-player">
+  <select id="playerSelect"></select>
+  <div id="playerMeta" class="player-meta"></div>
+  <div id="playerGames"></div>
+</div>
+
+<div class="panel" id="panel-team">
+  <select id="teamSelect">
+    <option value="SININEN">SININEN (lohko 2a)</option>
+    <option value="VALKOINEN">VALKOINEN (lohko 2b)</option>
+  </select>
+  <div id="teamGames"></div>
+</div>
+
+<script>
+const DATA = {"players": [{"name": "Felix", "age": 6, "goalie_games": 6, "is_goalie": true, "game_ids": ["g10", "g2", "g11", "g12", "g17", "g13"]}, {"name": "Niilo L.", "age": 6, "goalie_games": 6, "is_goalie": true, "game_ids": ["g1", "g2", "g7", "g3", "g4", "g5"]}, {"name": "Ilari", "age": 9, "goalie_games": 3, "is_goalie": true, "game_ids": ["g1", "g14", "g11", "g7", "g3", "g16", "g4", "g9", "g5"]}, {"name": "Leon", "age": 9, "goalie_games": 5, "is_goalie": true, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g17", "g8", "g13"]}, {"name": "Oliver", "age": 8, "goalie_games": 3, "is_goalie": true, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Verneri", "age": 8, "goalie_games": 3, "is_goalie": true, "game_ids": ["g14", "g11", "g15", "g12", "g17", "g18", "g9", "g13"]}, {"name": "Aatos", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18"]}, {"name": "Akseli", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Christer", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g11", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Eino", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Helmiina", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Hilma", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g6", "g11", "g7", "g12", "g8", "g9", "g5"]}, {"name": "Iisak", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g18", "g5"]}, {"name": "Jarkko", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g6", "g11", "g7", "g3", "g4", "g8", "g18", "g5"]}, {"name": "Jesse", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g14", "g11", "g7", "g4", "g17", "g18", "g13"]}, {"name": "Konsta", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Leevi", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Lilja", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g7", "g12", "g4", "g8", "g9", "g5"]}, {"name": "Matilda", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Max", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g14", "g6", "g11", "g7", "g3", "g8", "g9", "g13"]}, {"name": "Niilo K.", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g12", "g16", "g17", "g9", "g13"]}, {"name": "Noel", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g7", "g3", "g16", "g4", "g8", "g9", "g5"]}, {"name": "Nooa", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Patrik", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g13"]}, {"name": "Paulus", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Topi", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Valma", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g11", "g7", "g3", "g16", "g17", "g5"]}, {"name": "Vilho J.", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Vilho V.", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g6", "g15", "g12", "g16", "g18", "g13"]}, {"name": "Vili", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g6", "g11", "g15", "g12", "g16", "g18", "g9", "g13"]}, {"name": "Vilmeri", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g18", "g5"]}], "games": [{"id": "g1", "date": "26.9.", "label": "26.9. Ilves/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vili", "Vilmeri"]}, {"id": "g10", "date": "27.9.", "label": "27.9. Tappara/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V."]}, {"id": "g2", "date": "4.10.", "label": "4.10. Uplakers/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Felix", "Niilo L.", "Leon", "Christer", "Hilma", "Iisak", "Konsta", "Leevi", "Lilja", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilho V.", "Vilmeri"]}, {"id": "g14", "date": "4.10.", "label": "4.10. Uplakers/Ylojarvi", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Noel", "Patrik", "Topi"]}, {"id": "g6", "date": "25.10.", "label": "25.10. Sisu/Hakio", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vilho V.", "Vili", "Vilmeri"]}, {"id": "g11", "date": "1.11.", "label": "1.11. Leki/Lempaala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Ilari", "Verneri", "Aatos", "Christer", "Hilma", "Jarkko", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Valma", "Vili"]}, {"id": "g15", "date": "7.11.", "label": "7.11. VAPS/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Nooa", "Patrik", "Topi", "Vilho J.", "Vilho V.", "Vili"]}, {"id": "g7", "date": "8.11.", "label": "8.11. Tappara/Haka3", "color": "SININEN", "type": "Iso kentta", "roster": ["Niilo L.", "Ilari", "Hilma", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Paulus", "Valma", "Vilmeri"]}, {"id": "g3", "date": "15.11.", "label": "15.11. HPK/Hakio", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"]}, {"id": "g12", "date": "15.11.", "label": "15.11. Pelicans/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"]}, {"id": "g16", "date": "21.11.", "label": "21.11. Hokkarit/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V.", "Vili"]}, {"id": "g4", "date": "22.11.", "label": "22.11. Pelicans/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"]}, {"id": "g17", "date": "28.11.", "label": "28.11. Pelicans/Laune", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Niilo K.", "Patrik", "Topi", "Valma"]}, {"id": "g8", "date": "29.11.", "label": "29.11. Ilves/Hervanta", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"]}, {"id": "g18", "date": "5.12.", "label": "5.12. Kiekko-Ahma/Valkeakoski", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Iisak", "Jarkko", "Jesse", "Matilda", "Topi", "Vilho V.", "Vili", "Vilmeri"]}, {"id": "g9", "date": "6.12.", "label": "6.12. Pelicans/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": ["Ilari", "Verneri", "Christer", "Hilma", "Konsta", "Leevi", "Lilja", "Max", "Niilo K.", "Noel", "Nooa", "Paulus", "Vilho J.", "Vili"]}, {"id": "g5", "date": "13.12.", "label": "13.12. Uplakers/Ylojarvi", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"]}, {"id": "g13", "date": "13.12.", "label": "13.12. Ruoska/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"]}]}
+;
+
+const gameById = {};
+DATA.games.forEach(g => gameById[g.id] = g);
+
+function dateSort(a, b) {
+  const parse = d => {
+    const [day, month] = d.date.replace(/\.$/,'').split('.').map(Number);
+    return month * 100 + day;
+  };
+  return parse(a) - parse(b);
+}
+DATA.games.sort(dateSort);
+
+function goalieBadge(p) {
+  return p.is_goalie ? ' &#127978;' : '';
+}
+
+function renderGameCard(g, opts) {
+  opts = opts || {};
+  const div = document.createElement('div');
+  div.className = 'game-card';
+  const rosterHtml = g.roster.map(name => {
+    const pl = DATA.players.find(p => p.name === name);
+    const cls = pl && pl.is_goalie ? 'roster-player goalie' : 'roster-player';
+    return `<span class="${cls}">${escapeHtml(name)}${pl && pl.is_goalie ? ' 🥅' : ''}</span>`;
+  }).join('');
+  const highlightName = opts.highlightPlayer;
+  const rosterId = 'roster-' + g.id + (opts.uid || '');
+  div.innerHTML = `
+    <div class="game-top">
+      <div>
+        <div class="game-date">${escapeHtml(g.date)}</div>
+        <div class="game-opp">${escapeHtml(g.label.split('. ').slice(1).join('. ') || g.label)}</div>
+      </div>
+      <span class="badge ${g.color}">${g.color}</span>
+    </div>
+    <div class="game-type">${escapeHtml(g.type)} &middot; ${g.roster.length} pelaajaa</div>
+    <div class="roster-toggle" data-target="${rosterId}">Näytä kokoonpano ▾</div>
+    <div class="roster" id="${rosterId}">${rosterHtml}</div>
+  `;
+  return div;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ---- Player view ----
+const playerSelect = document.getElementById('playerSelect');
+DATA.players.forEach(p => {
+  const opt = document.createElement('option');
+  opt.value = p.name;
+  opt.textContent = p.name + (p.is_goalie ? ' (maalivahti)' : '');
+  playerSelect.appendChild(opt);
+});
+
+function renderPlayer() {
+  const name = playerSelect.value;
+  const p = DATA.players.find(x => x.name === name);
+  const meta = document.getElementById('playerMeta');
+  const gamesDiv = document.getElementById('playerGames');
+  gamesDiv.innerHTML = '';
+  if (!p) return;
+
+  const games = p.game_ids.map(id => gameById[id]).filter(Boolean).sort(dateSort);
+  meta.textContent = `${games.length} peliä yhteensä` + (p.is_goalie ? ` · maalivahtina ${p.goalie_games} pelissä (koko kausi)` : '');
+
+  if (games.length === 0) {
+    gamesDiv.innerHTML = '<div class="empty">Ei pelejä merkittynä.</div>';
+    return;
+  }
+  games.forEach(g => gamesDiv.appendChild(renderGameCard(g, {uid: '-p'})));
+}
+playerSelect.addEventListener('change', renderPlayer);
+
+// ---- Team view ----
+const teamSelect = document.getElementById('teamSelect');
+function renderTeam() {
+  const color = teamSelect.value;
+  const div = document.getElementById('teamGames');
+  div.innerHTML = '';
+  const games = DATA.games.filter(g => g.color === color).sort(dateSort);
+  const pien = games.filter(g => g.type === 'Pienpelit');
+  const iso = games.filter(g => g.type !== 'Pienpelit');
+
+  if (pien.length) {
+    const lbl = document.createElement('div');
+    lbl.className = 'section-label';
+    lbl.textContent = 'Pienpelit';
+    div.appendChild(lbl);
+    pien.forEach(g => div.appendChild(renderGameCard(g, {uid: '-t'})));
+  }
+  if (iso.length) {
+    const lbl = document.createElement('div');
+    lbl.className = 'section-label';
+    lbl.textContent = 'Iso kenttä';
+    div.appendChild(lbl);
+    iso.forEach(g => div.appendChild(renderGameCard(g, {uid: '-t'})));
+  }
+}
+teamSelect.addEventListener('change', renderTeam);
+
+// ---- Tabs ----
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ---- Roster toggle (delegated) ----
+document.body.addEventListener('click', (e) => {
+  const t = e.target.closest('.roster-toggle');
+  if (!t) return;
+  const target = document.getElementById(t.dataset.target);
+  if (!target) return;
+  target.classList.toggle('show');
+  t.textContent = target.classList.contains('show') ? 'Piilota kokoonpano ▴' : 'Näytä kokoonpano ▾';
+});
+
+renderPlayer();
+renderTeam();
+</script>
+</body>
+</html>
