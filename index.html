@@ -205,6 +205,14 @@
   }
   :root[data-theme="dark"] .game-date, :root:not([data-theme="light"]) .game-date { color: #cfe0f5; }
 
+  .game-time {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--muted);
+    vertical-align: middle;
+  }
+
   .badge {
     font-size: 0.68rem;
     font-weight: 700;
@@ -455,8 +463,7 @@ import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/f
 // option alongside the Firebase save).
 const PRISTINE_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
-const DATA = {"players": [{"name": "Felix", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Niilo L.", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Ilari", "age": 9, "goalie_games": 3, "is_goalie": true}, {"name": "Leon", "age": 9, "goalie_games": 5, "is_goalie": true}, {"name": "Oliver", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Verneri", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Aatos", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Akseli", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Christer", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Eino", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Helmiina", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Hilma", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Iisak", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jarkko", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jesse", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Konsta", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Leevi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Lilja", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Matilda", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Max", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Niilo K.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Noel", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Nooa", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Patrik", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Paulus", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Topi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Valma", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vilho J.", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilho V.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vili", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilmeri", "age": 9, "goalie_games": null, "is_goalie": false}], "games": [{"id": "g1", "date": "26.9.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "Ilves/Kangasala"}, {"id": "g10", "date": "27.9.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V."], "goalies_in_game": ["Felix", "Oliver"], "opponent": "Tappara/Kangasala"}, {"id": "g2", "date": "4.10.", "color": "SININEN", "type": "Pienpelit", "roster": ["Felix", "Niilo L.", "Leon", "Christer", "Hilma", "Iisak", "Konsta", "Leevi", "Lilja", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilho V.", "Vilmeri"], "goalies_in_game": ["Felix", "Niilo L."], "opponent": "Uplakers/Kangasala"}, {"id": "g14", "date": "4.10.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Noel", "Patrik", "Topi"], "goalies_in_game": ["Verneri"], "opponent": "Uplakers/Ylojarvi"}, {"id": "g6", "date": "25.10.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Sisu/Hakio"}, {"id": "g11", "date": "1.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Ilari", "Verneri", "Aatos", "Christer", "Hilma", "Jarkko", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Valma", "Vili"], "goalies_in_game": ["Felix", "Ilari"], "opponent": "Leki/Lempaala"}, {"id": "g15", "date": "7.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Nooa", "Patrik", "Topi", "Vilho J.", "Vilho V.", "Vili"], "goalies_in_game": ["Oliver"], "opponent": "VAPS/Kangasala"}, {"id": "g7", "date": "8.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Niilo L.", "Ilari", "Hilma", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Paulus", "Valma", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Tappara/Haka3"}, {"id": "g3", "date": "15.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "HPK/Hakio"}, {"id": "g12", "date": "15.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Verneri"], "opponent": "Pelicans/Kangasala"}, {"id": "g16", "date": "21.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V.", "Vili"], "goalies_in_game": ["Ilari"], "opponent": "Hokkarit/Kangasala"}, {"id": "g4", "date": "22.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Pelicans/Kangasala"}, {"id": "g17", "date": "28.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Niilo K.", "Patrik", "Topi", "Valma"], "goalies_in_game": ["Felix"], "opponent": "Pelicans/Laune"}, {"id": "g8", "date": "29.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Ilves/Hervanta"}, {"id": "g18", "date": "5.12.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Iisak", "Jarkko", "Jesse", "Matilda", "Topi", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Oliver"], "opponent": "Kiekko-Ahma/Valkeakoski"}, {"id": "g9", "date": "6.12.", "color": "SININEN", "type": "Iso kentta", "roster": ["Ilari", "Verneri", "Christer", "Hilma", "Konsta", "Leevi", "Lilja", "Max", "Niilo K.", "Noel", "Nooa", "Paulus", "Vilho J.", "Vili"], "goalies_in_game": ["Verneri"], "opponent": "Pelicans/Kangasala"}, {"id": "g5", "date": "13.12.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Ilari", "Niilo L."], "opponent": "Uplakers/Ylojarvi"}, {"id": "g13", "date": "13.12.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Leon"], "opponent": "Ruoska/Kangasala"}]}
-
+const DATA = {"players": [{"name": "Felix", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Niilo L.", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Ilari", "age": 9, "goalie_games": 3, "is_goalie": true}, {"name": "Leon", "age": 9, "goalie_games": 5, "is_goalie": true}, {"name": "Oliver", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Verneri", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Aatos", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Akseli", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Christer", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Eino", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Helmiina", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Hilma", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Iisak", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jarkko", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jesse", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Konsta", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Leevi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Lilja", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Matilda", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Max", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Niilo K.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Noel", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Nooa", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Patrik", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Paulus", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Topi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Valma", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vilho J.", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilho V.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vili", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilmeri", "age": 9, "goalie_games": null, "is_goalie": false}], "games": [{"id": "g1", "date": "26.9.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "Ilves/Kangasala", "times": ["14:30", "15:45"]}, {"id": "g10", "date": "27.9.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V."], "goalies_in_game": ["Felix", "Oliver"], "opponent": "Tappara/Kangasala", "times": ["12:20", "13:30"]}, {"id": "g2", "date": "4.10.", "color": "SININEN", "type": "Pienpelit", "roster": ["Felix", "Niilo L.", "Leon", "Christer", "Hilma", "Iisak", "Konsta", "Leevi", "Lilja", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilho V.", "Vilmeri"], "goalies_in_game": ["Felix", "Niilo L."], "opponent": "Uplakers/Kangasala", "times": ["09:00", "10:30"]}, {"id": "g14", "date": "4.10.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Noel", "Patrik", "Topi"], "goalies_in_game": ["Verneri"], "opponent": "Uplakers/Ylojarvi", "times": ["", ""]}, {"id": "g6", "date": "25.10.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Sisu/Hakio", "times": ["13:00", "14:30"]}, {"id": "g11", "date": "1.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Ilari", "Verneri", "Aatos", "Christer", "Hilma", "Jarkko", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Valma", "Vili"], "goalies_in_game": ["Felix", "Ilari"], "opponent": "Leki/Lempaala", "times": ["11:00", ""]}, {"id": "g15", "date": "7.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Nooa", "Patrik", "Topi", "Vilho J.", "Vilho V.", "Vili"], "goalies_in_game": ["Oliver"], "opponent": "VAPS/Kangasala", "times": ["08:00", ""]}, {"id": "g7", "date": "8.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Niilo L.", "Ilari", "Hilma", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Paulus", "Valma", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Tappara/Haka3", "times": ["", ""]}, {"id": "g3", "date": "15.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "HPK/Hakio", "times": ["", ""]}, {"id": "g12", "date": "15.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Verneri"], "opponent": "Pelicans/Kangasala", "times": ["10:15", ""]}, {"id": "g16", "date": "21.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V.", "Vili"], "goalies_in_game": ["Ilari"], "opponent": "Hokkarit/Kangasala", "times": ["08:00", ""]}, {"id": "g4", "date": "22.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Pelicans/Kangasala", "times": ["09:00", ""]}, {"id": "g17", "date": "28.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Niilo K.", "Patrik", "Topi", "Valma"], "goalies_in_game": ["Felix"], "opponent": "Pelicans/Laune", "times": ["", ""]}, {"id": "g8", "date": "29.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Ilves/Hervanta", "times": ["12:30", ""]}, {"id": "g18", "date": "5.12.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Iisak", "Jarkko", "Jesse", "Matilda", "Topi", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Oliver"], "opponent": "Kiekko-Ahma/Valkeakoski", "times": ["", ""]}, {"id": "g9", "date": "6.12.", "color": "SININEN", "type": "Iso kentta", "roster": ["Ilari", "Verneri", "Christer", "Hilma", "Konsta", "Leevi", "Lilja", "Max", "Niilo K.", "Noel", "Nooa", "Paulus", "Vilho J.", "Vili"], "goalies_in_game": ["Verneri"], "opponent": "Pelicans/Kangasala", "times": ["09:00", ""]}, {"id": "g5", "date": "13.12.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Ilari", "Niilo L."], "opponent": "Uplakers/Ylojarvi", "times": ["15:15", "16:30"]}, {"id": "g13", "date": "13.12.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Leon"], "opponent": "Ruoska/Kangasala", "times": ["10:15", ""]}, {"id": "g19", "date": "9.1.", "opponent": "KOOVEE Black/Hervanta 1", "color": "SININEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["14:00", ""]}, {"id": "g20", "date": "17.1.", "opponent": "Ilves Montreal/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["09:00", ""]}, {"id": "g21", "date": "23.1.", "opponent": "Ilves Edmonton/Hervanta 2", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g22", "date": "24.1.", "opponent": "Tappara Musta/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["09:00", ""]}, {"id": "g23", "date": "31.1.", "opponent": "LeKi Sininen/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["09:00", ""]}, {"id": "g24", "date": "7.2.", "opponent": "Pelicans Itä Turkoosi/Pajulahti", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g25", "date": "13.2.", "opponent": "LeKi Sininen/Lempäälä", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["11:00", "12:30"]}, {"id": "g26", "date": "21.2.", "opponent": "HC Nokia Oranssi/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["10:30", ""]}, {"id": "g27", "date": "14.3.", "opponent": "SiSu Punainen/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["09:00", ""]}, {"id": "g28", "date": "20.3.", "opponent": "Pelicans Länsi Turkoosi/Laune 1", "color": "SININEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g29", "date": "21.3.", "opponent": "HPK Hietaset/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["09:00", ""]}, {"id": "g30", "date": "29.11.", "opponent": "Hokkarit Sininen/Hämeenkyrö", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g31", "date": "10.1.", "opponent": "Fortuna/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["10:15", ""]}, {"id": "g32", "date": "16.1.", "opponent": "HPK Tuulolat/Hakio C", "color": "VALKOINEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g33", "date": "23.1.", "opponent": "KOOVEE Red/Hervanta 2", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["12:00", ""]}, {"id": "g34", "date": "31.1.", "opponent": "Pelicans Länsi Valkoinen/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["10:15", ""]}, {"id": "g35", "date": "6.2.", "opponent": "HPK Miettiset/Hakio C", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g36", "date": "13.2.", "opponent": "Ilves Vancouver/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["08:00", ""]}, {"id": "g37", "date": "14.2.", "opponent": "HC Nokia Musta/Nokia 2", "color": "VALKOINEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["", ""]}, {"id": "g38", "date": "21.2.", "opponent": "KPK/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["10:15", ""]}, {"id": "g39", "date": "14.3.", "opponent": "Ilves Winnipeg/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": [], "goalies_in_game": [], "times": ["10:15", ""]}, {"id": "g40", "date": "20.3.", "opponent": "SiSu Valkoinen/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": [], "goalies_in_game": [], "times": ["08:00", ""]}]}
 ;
 
 // ---- Firebase: real login + shared live database ----
@@ -497,6 +504,12 @@ function goalieBadge(p) {
   return p.is_goalie ? ' &#127978;' : '';
 }
 
+function formatTimes(g) {
+  const times = (g.times || []).map(t => (t || '').trim()).filter(Boolean);
+  if (times.length === 0) return '';
+  return times.join(' & ');
+}
+
 function renderGameCard(g, opts) {
   opts = opts || {};
   const div = document.createElement('div');
@@ -529,18 +542,28 @@ function renderGameCard(g, opts) {
     positionHtml = `<span class="position-badge ${isGoalieThisGame ? 'is-goalie' : 'is-skater'}">${isGoalieThisGame ? '🥅 Maalivahtina' : '⛸️ Kentällä'}</span>`;
   }
 
+  const timesStr = formatTimes(g);
+  const timeHtml = timesStr ? `<span class="game-time">🕐 ${escapeHtml(timesStr)}</span>` : '';
+
+  const typeLineHtml = g.roster.length
+    ? `${escapeHtml(g.type)} &middot; ${g.roster.length} pelaajaa`
+    : `${escapeHtml(g.type)} &middot; <span style="color:var(--muted);">kokoonpanoa ei vielä vahvistettu</span>`;
+  const rosterSectionHtml = g.roster.length
+    ? `<div class="roster-toggle" data-target="${rosterId}">Näytä kokoonpano ▾</div>
+       <div class="roster" id="${rosterId}">${rosterHtml}</div>`
+    : '';
+
   div.innerHTML = `
     <div class="game-top">
       <div>
-        <div class="game-date">${escapeHtml(g.date)}</div>
+        <div class="game-date">${escapeHtml(g.date)} ${timeHtml}</div>
         <div class="game-opp">${escapeHtml(g.opponent)}</div>
       </div>
       <span class="badge ${g.color}">${g.color}</span>
     </div>
-    <div class="game-type">${escapeHtml(g.type)} &middot; ${g.roster.length} pelaajaa</div>
+    <div class="game-type">${typeLineHtml}</div>
     ${positionHtml}
-    <div class="roster-toggle" data-target="${rosterId}">Näytä kokoonpano ▾</div>
-    <div class="roster" id="${rosterId}">${rosterHtml}</div>
+    ${rosterSectionHtml}
   `;
   return div;
 }
@@ -629,7 +652,7 @@ function pad(n) { return String(n).padStart(2, '0'); }
 
 function gameDateParts(g) {
   const [day, month] = g.date.replace(/\.$/, '').split('.').map(Number);
-  const year = 2026; // KISA U11 syksy 2026
+  const year = month <= 6 ? 2027 : 2026; // syksy 2026 (heinä–joulu) jatkuu kaudeksi 2027 (tammi–kesä)
   return { day, month, year };
 }
 
@@ -652,16 +675,35 @@ function buildIcs(games, calName) {
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//KISA U11//Peliohjelma//FI', `X-WR-CALNAME:${escapeIcs(calName)}`];
   games.forEach(g => {
     const { year, month, day } = gameDateParts(g);
-    const end = nextDay(year, month, day);
     const opponent = g.opponent;
     const goalies = g.roster.filter(name => (g.goalies_in_game || []).includes(name));
     const skaters = g.roster.filter(name => !goalies.includes(name));
-    const desc = `${g.type}, ${g.color}\\nMaalivahdit: ${goalies.join(', ') || '-'}\\nKentällä: ${skaters.join(', ') || '-'}`;
+    const times = (g.times || []).map(t => (t || '').trim()).filter(Boolean);
+
+    let descExtra = '';
     lines.push('BEGIN:VEVENT');
     lines.push(`UID:${g.id}-${icsDate(year,month,day)}@kisa-u11`);
     lines.push(`DTSTAMP:${stamp}`);
-    lines.push(`DTSTART;VALUE=DATE:${icsDate(year, month, day)}`);
-    lines.push(`DTEND;VALUE=DATE:${icsDate(end.y, end.m, end.d)}`);
+
+    if (times.length > 0) {
+      const [h1, m1] = times[0].split(':').map(Number);
+      let endDt;
+      if (times.length > 1) {
+        const [h2, m2] = times[1].split(':').map(Number);
+        endDt = new Date(year, month - 1, day, h2, m2 + 45);
+        descExtra = `\\nOtteluajat: ${times.join(' ja ')}`;
+      } else {
+        endDt = new Date(year, month - 1, day, h1, m1 + 60);
+      }
+      lines.push(`DTSTART:${icsDate(year, month, day)}T${pad(h1)}${pad(m1)}00`);
+      lines.push(`DTEND:${icsDate(endDt.getFullYear(), endDt.getMonth() + 1, endDt.getDate())}T${pad(endDt.getHours())}${pad(endDt.getMinutes())}00`);
+    } else {
+      const end = nextDay(year, month, day);
+      lines.push(`DTSTART;VALUE=DATE:${icsDate(year, month, day)}`);
+      lines.push(`DTEND;VALUE=DATE:${icsDate(end.y, end.m, end.d)}`);
+    }
+
+    const desc = `${g.type}, ${g.color}${descExtra}\\nMaalivahdit: ${goalies.join(', ') || '-'}\\nKentällä: ${skaters.join(', ') || '-'}`;
     lines.push(`SUMMARY:${escapeIcs('KISA U11: ' + opponent + ' (' + g.color + ')')}`);
     lines.push(`DESCRIPTION:${escapeIcs(desc)}`);
     lines.push('END:VEVENT');
@@ -807,6 +849,20 @@ function renderAdminGames() {
           </div>
         </div>
         <div class="admin-row">
+          <div class="admin-field narrow">
+            <label>Aika 1</label>
+            <input type="text" value="${escapeHtml((g.times && g.times[0]) || '')}" placeholder="14:30" data-admin-game-time="0" data-game-id="${g.id}">
+          </div>
+          <div class="admin-field narrow">
+            <label>Aika 2</label>
+            <input type="text" value="${escapeHtml((g.times && g.times[1]) || '')}" placeholder="15:45" data-admin-game-time="1" data-game-id="${g.id}">
+          </div>
+          <div class="admin-field" style="flex:2; min-width:120px;">
+            <label>&nbsp;</label>
+            <span style="font-size:0.78rem; color:var(--muted);">Jätä tyhjäksi, jos aikaa ei tiedetä. Osa peleistä on kaksi peräkkäistä ottelua.</span>
+          </div>
+        </div>
+        <div class="admin-row">
           <div class="admin-field">
             <label>Joukkue</label>
             <select data-admin-game-field="color" data-game-id="${g.id}">
@@ -913,6 +969,15 @@ document.getElementById('adminPlayers').addEventListener('click', (e) => {
 // -- Game field edits (delegated) --
 document.getElementById('adminGames').addEventListener('change', (e) => {
   const t = e.target;
+  const timeIdx = t.dataset.adminGameTime;
+  if (timeIdx !== undefined) {
+    const g = gameById[t.dataset.gameId];
+    if (!g) return;
+    g.times = g.times || ['', ''];
+    g.times[Number(timeIdx)] = t.value.trim();
+    refreshAll();
+    return;
+  }
   const field = t.dataset.adminGameField;
   if (!field) return;
   const g = gameById[t.dataset.gameId];
@@ -962,7 +1027,7 @@ document.getElementById('adminGames').addEventListener('click', (e) => {
 
 document.getElementById('adminAddGameBtn').addEventListener('click', () => {
   const id = 'g' + Date.now();
-  const g = { id, date: '', opponent: '', color: 'SININEN', type: 'Pienpelit', roster: [], goalies_in_game: [] };
+  const g = { id, date: '', opponent: '', color: 'SININEN', type: 'Pienpelit', roster: [], goalies_in_game: [], times: ['', ''] };
   DATA.games.push(g);
   gameById[id] = g;
   refreshAll();
