@@ -683,12 +683,22 @@ function escapeHtml(s) {
 
 // ---- Player view ----
 const playerSelectEl = document.getElementById('playerSelect');
-DATA.players.forEach(p => {
-  const opt = document.createElement('option');
-  opt.value = p.name;
-  opt.textContent = p.name;
-  playerSelectEl.appendChild(opt);
-});
+function populatePlayerOptions() {
+  const prevVal = playerSelectEl.value;
+  playerSelectEl.innerHTML = '';
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Valitse pelaaja…';
+  playerSelectEl.appendChild(placeholder);
+  DATA.players.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.name;
+    opt.textContent = p.name;
+    playerSelectEl.appendChild(opt);
+  });
+  if (DATA.players.some(p => p.name === prevVal)) playerSelectEl.value = prevVal;
+}
+populatePlayerOptions();
 
 let dataLoaded = false;
 
@@ -716,7 +726,10 @@ function renderPlayer() {
   gamesDiv.innerHTML = '';
   if (!p) {
     meta.textContent = '';
-    gamesDiv.innerHTML = `<div class="empty">${dataLoaded ? 'Ei pelaajia.' : 'Ladataan tietoja…'}</div>`;
+    let msg = 'Valitse pelaaja yllä nähdäksesi hänen ottelunsa.';
+    if (!dataLoaded) msg = 'Ladataan tietoja…';
+    else if (DATA.players.length === 0) msg = 'Ei pelaajia.';
+    gamesDiv.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
 
@@ -772,14 +785,27 @@ function renderTeam() {
 teamSelectEl.addEventListener('change', renderTeam);
 
 // ---- Tabs ----
+const LAST_TAB_KEY = 'kisa_u11_last_tab';
+function activateTab(tabName) {
+  const tabEl = document.querySelector(`.tab[data-tab="${tabName}"]`);
+  const panelEl = document.getElementById('panel-' + tabName);
+  if (!tabEl || !panelEl) return false;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  tabEl.classList.add('active');
+  panelEl.classList.add('active');
+  return true;
+}
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    activateTab(tab.dataset.tab);
+    try { localStorage.setItem(LAST_TAB_KEY, tab.dataset.tab); } catch (e) {}
   });
 });
+try {
+  const savedTab = localStorage.getItem(LAST_TAB_KEY);
+  if (savedTab) activateTab(savedTab);
+} catch (e) {}
 
 // ---- Admin sub-tabs (Pelaajat / Ottelut) ----
 document.querySelectorAll('.sub-tab').forEach(tab => {
@@ -937,15 +963,7 @@ function refreshAll() {
   rebuildGameIndex();
   DATA.games.sort(dateSort);
   // rebuild player <select> options (names may have changed)
-  const prevPlayerVal = playerSelectEl.value;
-  playerSelectEl.innerHTML = '';
-  DATA.players.forEach(p => {
-    const opt = document.createElement('option');
-    opt.value = p.name;
-    opt.textContent = p.name;
-    playerSelectEl.appendChild(opt);
-  });
-  if (DATA.players.some(p => p.name === prevPlayerVal)) playerSelectEl.value = prevPlayerVal;
+  populatePlayerOptions();
 
   renderPlayer();
   renderTeam();
