@@ -581,13 +581,19 @@ DATA.players.forEach(p => {
   playerSelectEl.appendChild(opt);
 });
 
+let dataLoaded = false;
+
 function renderPlayer() {
   const name = playerSelectEl.value;
   const p = DATA.players.find(x => x.name === name);
   const meta = document.getElementById('playerMeta');
   const gamesDiv = document.getElementById('playerGames');
   gamesDiv.innerHTML = '';
-  if (!p) return;
+  if (!p) {
+    meta.textContent = '';
+    gamesDiv.innerHTML = `<div class="empty">${dataLoaded ? 'Ei pelaajia.' : 'Ladataan tietoja…'}</div>`;
+    return;
+  }
 
   const games = gamesForPlayer(name).sort(dateSort);
   meta.textContent = `${games.length} peliä yhteensä` + (p.is_goalie ? ` · maalivahtina ${p.goalie_games} pelissä (koko kausi)` : '');
@@ -609,6 +615,11 @@ function renderTeam() {
   const games = DATA.games.filter(g => g.color === color).sort(dateSort);
   const pien = games.filter(g => g.type === 'Pienpelit');
   const iso = games.filter(g => g.type !== 'Pienpelit');
+
+  if (!dataLoaded && games.length === 0) {
+    div.innerHTML = '<div class="empty">Ladataan tietoja…</div>';
+    return;
+  }
 
   if (pien.length) {
     const lbl = document.createElement('div');
@@ -1099,16 +1110,11 @@ document.getElementById('adminSaveBtn').addEventListener('click', async () => {
 });
 
 // -- Live subscription: everyone sees the latest saved data automatically --
-onSnapshot(DATA_DOC_REF, (snap) => {
-  if (!snap.exists()) return;
-  const remote = snap.data();
-  if (!remote || !Array.isArray(remote.players) || !Array.isArray(remote.games)) return;
-  DATA.players = remote.players;
-  DATA.games = remote.games;
-  refreshAll();
-}, (err) => {
-  console.error('Firestore-kuuntelu epäonnistui:', err);
-});
+// REPAIR MODE: live listener disabled on purpose. This copy keeps the
+// correct embedded dataset in memory so you can push it to Firestore
+// with the Save button without it being overwritten first. Switch back
+// to the normal file once the save below succeeds.
+dataLoaded = true;
 </script>
 </body>
 </html>
