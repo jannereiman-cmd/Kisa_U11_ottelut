@@ -2,129 +2,401 @@
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>KISA U11 Syksy 2026 - Peliohjelma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --blue: #1e5fbf;
-    --white-team: #999;
-    --bg: #f5f6f8;
+    --rink-navy: #0d2c4d;
+    --rink-navy-2: #123a63;
+    --ice-blue: #2f6fb0;
+    --ice-blue-light: #eaf1f9;
+    --silver: #8b93a0;
+    --silver-light: #eceef1;
+    --gold: #f2c14e;
+    --gold-light: #fdf1d6;
+    --bg: #f4f6f9;
     --card: #ffffff;
-    --border: #e0e2e6;
-    --text: #1a1c20;
-    --muted: #6b7280;
+    --border: #e2e6ec;
+    --text: #16202e;
+    --muted: #64748b;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(13,44,77,0.06), 0 4px 14px rgba(13,44,77,0.06);
+  }
+  :root:not([data-theme="light"]) {
+    /* dark mode overrides applied below via media query */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1420;
+      --card: #101b29;
+      --border: #223247;
+      --text: #eef2f7;
+      --muted: #93a2b8;
+      --ice-blue-light: #16283e;
+      --silver-light: #1b2634;
+      --gold-light: #2c2413;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 18px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1420;
+    --card: #101b29;
+    --border: #223247;
+    --text: #eef2f7;
+    --muted: #93a2b8;
+    --ice-blue-light: #16283e;
+    --silver-light: #1b2634;
+    --gold-light: #2c2413;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 18px rgba(0,0,0,0.35);
   }
   * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: var(--bg);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     color: var(--text);
     margin: 0;
-    padding: 16px;
+    padding: 0 0 32px;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
   }
-  h1 { font-size: 1.3rem; margin: 0 0 4px; }
-  .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* Hero header: rink-line motif */
+  .hero {
+    position: relative;
+    background: linear-gradient(160deg, var(--rink-navy) 0%, var(--rink-navy-2) 65%, var(--ice-blue) 130%);
+    color: #fff;
+    padding: 22px 16px 20px;
+    padding-top: calc(22px + env(safe-area-inset-top, 0px));
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ice-blue) 0%, var(--ice-blue) 30%, #e0455a 30%, #e0455a 70%, var(--ice-blue) 70%, var(--ice-blue) 100%);
+    opacity: 0.9;
+  }
+  .hero-inner { max-width: 560px; margin: 0 auto; position: relative; }
+  h1 {
+    font-family: "Oswald", "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    margin: 0 0 4px;
+    line-height: 1.2;
+  }
+  .sub { color: rgba(255,255,255,0.78); font-size: 0.87rem; }
+
+  .content { padding-top: 16px; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--silver-light);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 16px;
+  }
   .tab {
     flex: 1;
-    padding: 10px 12px;
+    padding: 9px 10px;
     text-align: center;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    background: transparent;
+    border-radius: 9px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: background 0.15s ease, color 0.15s ease;
   }
-  .tab.active { background: var(--blue); color: white; border-color: var(--blue); }
+  .tab.active {
+    background: var(--card);
+    color: var(--rink-navy);
+    box-shadow: var(--shadow);
+  }
+
   select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 11px 14px;
     font-size: 1rem;
-    border-radius: 10px;
+    font-weight: 500;
+    border-radius: 11px;
     border: 1px solid var(--border);
     background: var(--card);
     color: var(--text);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%2364748b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
   }
+
   .panel { display: none; }
   .panel.active { display: block; }
+
+  .player-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .player-meta strong { color: var(--text); }
+
+  .cal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ice-blue-light);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ice-blue);
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: filter 0.15s ease;
+  }
+  :root[data-theme="dark"] .cal-btn, :root:not([data-theme="light"]) .cal-btn { color: #7db3ec; }
+  .cal-btn:active { filter: brightness(0.94); }
+
+  .section-label {
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin: 20px 0 8px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
   .game-card {
+    position: relative;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 14px;
+    border-left: 4px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 13px 15px;
     margin-bottom: 10px;
   }
+  .game-card.team-sininen { border-left-color: var(--ice-blue); }
+  .game-card.team-valkoinen { border-left-color: var(--silver); }
+
   .game-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .game-date { font-weight: 700; font-size: 1.05rem; }
+  .game-date {
+    font-family: "Oswald", sans-serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--rink-navy);
+  }
+  :root[data-theme="dark"] .game-date, :root:not([data-theme="light"]) .game-date { color: #cfe0f5; }
+
   .badge {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    padding: 3px 8px;
+    letter-spacing: 0.03em;
+    padding: 4px 9px;
     border-radius: 20px;
     color: white;
     white-space: nowrap;
   }
-  .badge.SININEN { background: var(--blue); }
-  .badge.VALKOINEN { background: #b8b8b8; color: #222; }
-  .game-opp { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
-  .game-type { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
-  .roster-toggle {
+  .badge.SININEN { background: var(--ice-blue); }
+  .badge.VALKOINEN { background: var(--silver); color: #fff; }
+
+  .game-opp { color: var(--text); font-size: 0.92rem; margin-top: 2px; font-weight: 500; }
+  .game-type { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
+
+  .position-badge {
+    display: inline-block;
     margin-top: 8px;
-    font-size: 0.85rem;
-    color: var(--blue);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+  .position-badge.is-goalie { background: var(--gold-light); color: #8a6a10; border: 1px solid var(--gold); }
+  .position-badge.is-skater { background: var(--ice-blue-light); color: var(--ice-blue); }
+  :root[data-theme="dark"] .position-badge.is-goalie, :root:not([data-theme="light"]) .position-badge.is-goalie { color: #f2c14e; }
+  :root[data-theme="dark"] .position-badge.is-skater, :root:not([data-theme="light"]) .position-badge.is-skater { color: #7db3ec; }
+
+  .roster-toggle {
+    margin-top: 9px;
+    font-size: 0.84rem;
+    color: var(--ice-blue);
     cursor: pointer;
     font-weight: 600;
     user-select: none;
   }
+  :root[data-theme="dark"] .roster-toggle, :root:not([data-theme="light"]) .roster-toggle { color: #7db3ec; }
+
   .roster {
     display: none;
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 9px;
+    padding-top: 9px;
     border-top: 1px dashed var(--border);
     font-size: 0.88rem;
-    line-height: 1.6;
   }
   .roster.show { display: block; }
+  .roster-group-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    margin: 7px 0 4px;
+  }
+  .roster-group-label:first-child { margin-top: 0; }
+  .roster-group { line-height: 1.7; }
   .roster-player {
     display: inline-block;
-    background: #eef2f7;
+    background: var(--ice-blue-light);
     border-radius: 8px;
-    padding: 3px 9px;
-    margin: 2px 3px 2px 0;
+    padding: 3px 10px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.87rem;
   }
-  .roster-player.goalie { background: #fde68a; }
-  .player-meta {
+  .roster-player.goalie { background: var(--gold-light); border: 1px solid var(--gold); }
+
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 28px 0;
+    text-align: center;
+  }
+
+  /* ---- Admin panel ---- */
+  .admin-note {
     font-size: 0.82rem;
     color: var(--muted);
+    background: var(--silver-light);
+    border-radius: 10px;
+    padding: 10px 12px;
     margin-bottom: 14px;
+    line-height: 1.5;
   }
-  .empty { color: var(--muted); font-size: 0.9rem; padding: 20px 0; text-align: center; }
-  .section-label {
-    font-weight: 700;
+  .admin-note code { background: rgba(0,0,0,0.08); padding: 1px 5px; border-radius: 4px; }
+  .admin-error {
+    color: #c0304a;
     font-size: 0.85rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin: 18px 0 8px;
+    margin-top: 8px;
+    min-height: 1.2em;
   }
-  .section-label:first-child { margin-top: 0; }
+  #adminEmail, #adminPasswordInput {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 1rem;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .admin-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 13px 15px;
+    margin-bottom: 10px;
+  }
+  .admin-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .admin-row label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .admin-field { flex: 1; min-width: 90px; }
+  .admin-field input, .admin-field select {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.92rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .admin-field.narrow { flex: 0 0 70px; }
+  .admin-checkline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+  .admin-chip-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 9px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .admin-chip-toggle.on { background: var(--ice-blue-light); border-color: var(--ice-blue); }
+  .admin-chip-toggle.goalie-on { background: var(--gold-light); border-color: var(--gold); }
+  .admin-chip-toggle input { margin: 0; }
+  .admin-subgroup-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    margin: 8px 0 4px;
+  }
+  .admin-delete-btn {
+    background: none;
+    border: none;
+    color: #c0304a;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+  }
 </style>
 </head>
 <body>
 
-<h1>KISA U11 - Peliohjelma syksy 2026</h1>
-<div class="sub">Lohko 2a (SININEN) ja Lohko 2b (VALKOINEN)</div>
+<div class="hero">
+  <div class="hero-inner">
+    <h1>KISA U11 &middot; Peliohjelma</h1>
+    <div class="sub">Syksy 2026 &middot; Lohko 2a (SININEN) ja Lohko 2b (VALKOINEN)</div>
+  </div>
+</div>
+
+<div class="wrap content">
 
 <div class="tabs">
   <div class="tab active" data-tab="player">Pelaajan mukaan</div>
   <div class="tab" data-tab="team">Joukkueen mukaan</div>
+  <div class="tab" data-tab="admin">Ylläpito</div>
 </div>
 
 <div class="panel active" id="panel-player">
   <select id="playerSelect"></select>
   <div id="playerMeta" class="player-meta"></div>
+  <div class="cal-btn" id="playerCalBtn">📅 Lisää kalenteriin (.ics)</div>
   <div id="playerGames"></div>
 </div>
 
@@ -133,15 +405,84 @@
     <option value="SININEN">SININEN (lohko 2a)</option>
     <option value="VALKOINEN">VALKOINEN (lohko 2b)</option>
   </select>
+  <div class="cal-btn" id="teamCalBtn">📅 Lisää kalenteriin (.ics)</div>
   <div id="teamGames"></div>
 </div>
 
-<script>
-const DATA = {"players": [{"name": "Felix", "age": 6, "goalie_games": 6, "is_goalie": true, "game_ids": ["g10", "g2", "g11", "g12", "g17", "g13"]}, {"name": "Niilo L.", "age": 6, "goalie_games": 6, "is_goalie": true, "game_ids": ["g1", "g2", "g7", "g3", "g4", "g5"]}, {"name": "Ilari", "age": 9, "goalie_games": 3, "is_goalie": true, "game_ids": ["g1", "g14", "g11", "g7", "g3", "g16", "g4", "g9", "g5"]}, {"name": "Leon", "age": 9, "goalie_games": 5, "is_goalie": true, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g17", "g8", "g13"]}, {"name": "Oliver", "age": 8, "goalie_games": 3, "is_goalie": true, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Verneri", "age": 8, "goalie_games": 3, "is_goalie": true, "game_ids": ["g14", "g11", "g15", "g12", "g17", "g18", "g9", "g13"]}, {"name": "Aatos", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18"]}, {"name": "Akseli", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Christer", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g11", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Eino", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Helmiina", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Hilma", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g6", "g11", "g7", "g12", "g8", "g9", "g5"]}, {"name": "Iisak", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g18", "g5"]}, {"name": "Jarkko", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g6", "g11", "g7", "g3", "g4", "g8", "g18", "g5"]}, {"name": "Jesse", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g14", "g11", "g7", "g4", "g17", "g18", "g13"]}, {"name": "Konsta", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Leevi", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Lilja", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g7", "g12", "g4", "g8", "g9", "g5"]}, {"name": "Matilda", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Max", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g14", "g6", "g11", "g7", "g3", "g8", "g9", "g13"]}, {"name": "Niilo K.", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g12", "g16", "g17", "g9", "g13"]}, {"name": "Noel", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g7", "g3", "g16", "g4", "g8", "g9", "g5"]}, {"name": "Nooa", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Patrik", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g13"]}, {"name": "Paulus", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Topi", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g14", "g11", "g15", "g12", "g16", "g17", "g18", "g13"]}, {"name": "Valma", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g11", "g7", "g3", "g16", "g17", "g5"]}, {"name": "Vilho J.", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g15", "g3", "g4", "g8", "g9", "g5"]}, {"name": "Vilho V.", "age": 8, "goalie_games": null, "is_goalie": false, "game_ids": ["g10", "g2", "g6", "g15", "g12", "g16", "g18", "g13"]}, {"name": "Vili", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g6", "g11", "g15", "g12", "g16", "g18", "g9", "g13"]}, {"name": "Vilmeri", "age": 9, "goalie_games": null, "is_goalie": false, "game_ids": ["g1", "g2", "g6", "g7", "g3", "g4", "g8", "g18", "g5"]}], "games": [{"id": "g1", "date": "26.9.", "label": "26.9. Ilves/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vili", "Vilmeri"]}, {"id": "g10", "date": "27.9.", "label": "27.9. Tappara/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V."]}, {"id": "g2", "date": "4.10.", "label": "4.10. Uplakers/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Felix", "Niilo L.", "Leon", "Christer", "Hilma", "Iisak", "Konsta", "Leevi", "Lilja", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilho V.", "Vilmeri"]}, {"id": "g14", "date": "4.10.", "label": "4.10. Uplakers/Ylojarvi", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Noel", "Patrik", "Topi"]}, {"id": "g6", "date": "25.10.", "label": "25.10. Sisu/Hakio", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vilho V.", "Vili", "Vilmeri"]}, {"id": "g11", "date": "1.11.", "label": "1.11. Leki/Lempaala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Ilari", "Verneri", "Aatos", "Christer", "Hilma", "Jarkko", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Valma", "Vili"]}, {"id": "g15", "date": "7.11.", "label": "7.11. VAPS/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Nooa", "Patrik", "Topi", "Vilho J.", "Vilho V.", "Vili"]}, {"id": "g7", "date": "8.11.", "label": "8.11. Tappara/Haka3", "color": "SININEN", "type": "Iso kentta", "roster": ["Niilo L.", "Ilari", "Hilma", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Paulus", "Valma", "Vilmeri"]}, {"id": "g3", "date": "15.11.", "label": "15.11. HPK/Hakio", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"]}, {"id": "g12", "date": "15.11.", "label": "15.11. Pelicans/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"]}, {"id": "g16", "date": "21.11.", "label": "21.11. Hokkarit/Kangasala", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V.", "Vili"]}, {"id": "g4", "date": "22.11.", "label": "22.11. Pelicans/Kangasala", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"]}, {"id": "g17", "date": "28.11.", "label": "28.11. Pelicans/Laune", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Niilo K.", "Patrik", "Topi", "Valma"]}, {"id": "g8", "date": "29.11.", "label": "29.11. Ilves/Hervanta", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"]}, {"id": "g18", "date": "5.12.", "label": "5.12. Kiekko-Ahma/Valkeakoski", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Iisak", "Jarkko", "Jesse", "Matilda", "Topi", "Vilho V.", "Vili", "Vilmeri"]}, {"id": "g9", "date": "6.12.", "label": "6.12. Pelicans/Kangasala", "color": "SININEN", "type": "Iso kentta", "roster": ["Ilari", "Verneri", "Christer", "Hilma", "Konsta", "Leevi", "Lilja", "Max", "Niilo K.", "Noel", "Nooa", "Paulus", "Vilho J.", "Vili"]}, {"id": "g5", "date": "13.12.", "label": "13.12. Uplakers/Ylojarvi", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"]}, {"id": "g13", "date": "13.12.", "label": "13.12. Ruoska/Kangasala", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"]}]}
+<div class="panel" id="panel-admin">
+  <div id="adminLocked">
+    <div class="admin-note">Kirjaudu sisään muokataksesi peliohjelmaa. Tallennetut muutokset näkyvät heti kaikille.</div>
+    <input type="email" id="adminEmail" placeholder="Sähköposti" autocomplete="username">
+    <input type="password" id="adminPasswordInput" placeholder="Salasana" autocomplete="current-password">
+    <div class="cal-btn" id="adminLoginBtn">🔑 Kirjaudu</div>
+    <div id="adminError" class="admin-error"></div>
+  </div>
+  <div id="adminPanel" style="display:none">
+    <div class="admin-row" style="justify-content:space-between; align-items:center; flex-wrap:nowrap;">
+      <span id="adminUserLabel" style="font-size:0.82rem; color:var(--muted);"></span>
+      <button class="admin-delete-btn" id="adminLogoutBtn" style="color:var(--ice-blue); white-space:nowrap;">Kirjaudu ulos</button>
+    </div>
+    <div class="admin-note">Muokkaa pelaajia ja otteluita alla, ja tallenna pilveen — muutokset näkyvät kaikille heti.</div>
+
+    <div class="section-label">Pelaajat</div>
+    <div id="adminPlayers"></div>
+    <div class="cal-btn" id="adminAddPlayerBtn">+ Lisää pelaaja</div>
+
+    <div class="section-label">Ottelut</div>
+    <div id="adminGames"></div>
+    <div class="cal-btn" id="adminAddGameBtn">+ Lisää ottelu</div>
+
+    <div class="section-label">Tallenna</div>
+    <div class="cal-btn" id="adminSaveBtn">☁️ Tallenna muutokset kaikille</div>
+    <div id="adminSaveStatus" class="admin-error"></div>
+
+    <div class="section-label">Varmuuskopio</div>
+    <div class="admin-note">Valinnainen: lataa myös paikallinen varmuuskopiotiedosto koneelle.</div>
+    <div class="cal-btn" id="adminExportBtn">⬇️ Lataa varmuuskopio (.html)</div>
+  </div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js';
+
+// Snapshot of the page's original static markup, captured before any
+// dynamic rendering touches the DOM. Used by the admin export feature
+// to produce an updated standalone HTML file (kept as an offline backup
+// option alongside the Firebase save).
+const PRISTINE_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+const DATA = {"players": [{"name": "Felix", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Niilo L.", "age": 6, "goalie_games": 6, "is_goalie": true}, {"name": "Ilari", "age": 9, "goalie_games": 3, "is_goalie": true}, {"name": "Leon", "age": 9, "goalie_games": 5, "is_goalie": true}, {"name": "Oliver", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Verneri", "age": 8, "goalie_games": 3, "is_goalie": true}, {"name": "Aatos", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Akseli", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Christer", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Eino", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Helmiina", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Hilma", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Iisak", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jarkko", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Jesse", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Konsta", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Leevi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Lilja", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Matilda", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Max", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Niilo K.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Noel", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Nooa", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Patrik", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Paulus", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Topi", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Valma", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vilho J.", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilho V.", "age": 8, "goalie_games": null, "is_goalie": false}, {"name": "Vili", "age": 9, "goalie_games": null, "is_goalie": false}, {"name": "Vilmeri", "age": 9, "goalie_games": null, "is_goalie": false}], "games": [{"id": "g1", "date": "26.9.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "Ilves/Kangasala"}, {"id": "g10", "date": "27.9.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V."], "goalies_in_game": ["Felix", "Oliver"], "opponent": "Tappara/Kangasala"}, {"id": "g2", "date": "4.10.", "color": "SININEN", "type": "Pienpelit", "roster": ["Felix", "Niilo L.", "Leon", "Christer", "Hilma", "Iisak", "Konsta", "Leevi", "Lilja", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilho V.", "Vilmeri"], "goalies_in_game": ["Felix", "Niilo L."], "opponent": "Uplakers/Kangasala"}, {"id": "g14", "date": "4.10.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Noel", "Patrik", "Topi"], "goalies_in_game": ["Verneri"], "opponent": "Uplakers/Ylojarvi"}, {"id": "g6", "date": "25.10.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Nooa", "Paulus", "Vilho J.", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Sisu/Hakio"}, {"id": "g11", "date": "1.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Ilari", "Verneri", "Aatos", "Christer", "Hilma", "Jarkko", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Valma", "Vili"], "goalies_in_game": ["Felix", "Ilari"], "opponent": "Leki/Lempaala"}, {"id": "g15", "date": "7.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Nooa", "Patrik", "Topi", "Vilho J.", "Vilho V.", "Vili"], "goalies_in_game": ["Oliver"], "opponent": "VAPS/Kangasala"}, {"id": "g7", "date": "8.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Niilo L.", "Ilari", "Hilma", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Paulus", "Valma", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Tappara/Haka3"}, {"id": "g3", "date": "15.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Konsta", "Leevi", "Max", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon", "Niilo L."], "opponent": "HPK/Hakio"}, {"id": "g12", "date": "15.11.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Hilma", "Lilja", "Matilda", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Verneri"], "opponent": "Pelicans/Kangasala"}, {"id": "g16", "date": "21.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Ilari", "Oliver", "Aatos", "Akseli", "Eino", "Helmiina", "Matilda", "Niilo K.", "Noel", "Patrik", "Topi", "Valma", "Vilho V.", "Vili"], "goalies_in_game": ["Ilari"], "opponent": "Hokkarit/Kangasala"}, {"id": "g4", "date": "22.11.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Leon", "Christer", "Iisak", "Jarkko", "Jesse", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Niilo L."], "opponent": "Pelicans/Kangasala"}, {"id": "g17", "date": "28.11.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Niilo K.", "Patrik", "Topi", "Valma"], "goalies_in_game": ["Felix"], "opponent": "Pelicans/Laune"}, {"id": "g8", "date": "29.11.", "color": "SININEN", "type": "Iso kentta", "roster": ["Leon", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Max", "Noel", "Nooa", "Paulus", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Leon"], "opponent": "Ilves/Hervanta"}, {"id": "g18", "date": "5.12.", "color": "VALKOINEN", "type": "Iso kentta", "roster": ["Oliver", "Verneri", "Aatos", "Akseli", "Eino", "Helmiina", "Iisak", "Jarkko", "Jesse", "Matilda", "Topi", "Vilho V.", "Vili", "Vilmeri"], "goalies_in_game": ["Oliver"], "opponent": "Kiekko-Ahma/Valkeakoski"}, {"id": "g9", "date": "6.12.", "color": "SININEN", "type": "Iso kentta", "roster": ["Ilari", "Verneri", "Christer", "Hilma", "Konsta", "Leevi", "Lilja", "Max", "Niilo K.", "Noel", "Nooa", "Paulus", "Vilho J.", "Vili"], "goalies_in_game": ["Verneri"], "opponent": "Pelicans/Kangasala"}, {"id": "g5", "date": "13.12.", "color": "SININEN", "type": "Pienpelit", "roster": ["Niilo L.", "Ilari", "Christer", "Hilma", "Iisak", "Jarkko", "Konsta", "Leevi", "Lilja", "Noel", "Nooa", "Paulus", "Valma", "Vilho J.", "Vilmeri"], "goalies_in_game": ["Ilari", "Niilo L."], "opponent": "Uplakers/Ylojarvi"}, {"id": "g13", "date": "13.12.", "color": "VALKOINEN", "type": "Pienpelit", "roster": ["Felix", "Leon", "Oliver", "Verneri", "Akseli", "Eino", "Helmiina", "Jesse", "Matilda", "Max", "Niilo K.", "Patrik", "Topi", "Vilho V.", "Vili"], "goalies_in_game": ["Felix", "Leon"], "opponent": "Ruoska/Kangasala"}]}
+
 ;
 
-const gameById = {};
-DATA.games.forEach(g => gameById[g.id] = g);
+// ---- Firebase: real login + shared live database ----
+const firebaseConfig = {
+  apiKey: "AIzaSyDOYU7XNQHozFHfVGfZipVAMwq4w2l9rZQ",
+  authDomain: "kisa-eagles-u11.firebaseapp.com",
+  projectId: "kisa-eagles-u11",
+  storageBucket: "kisa-eagles-u11.firebasestorage.app",
+  messagingSenderId: "243461843866",
+  appId: "1:243461843866:web:258f384bfecf3e5d01a823"
+};
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+const DATA_DOC_REF = doc(db, 'kisa_u11', 'data');
+
+let gameById = {};
+function rebuildGameIndex() {
+  gameById = {};
+  DATA.games.forEach(g => gameById[g.id] = g);
+}
+rebuildGameIndex();
+
+function gamesForPlayer(name) {
+  return DATA.games.filter(g => g.roster.includes(name));
+}
 
 function dateSort(a, b) {
   const parse = d => {
@@ -160,22 +501,44 @@ function renderGameCard(g, opts) {
   opts = opts || {};
   const div = document.createElement('div');
   div.className = 'game-card';
-  const rosterHtml = g.roster.map(name => {
-    const pl = DATA.players.find(p => p.name === name);
-    const cls = pl && pl.is_goalie ? 'roster-player goalie' : 'roster-player';
-    return `<span class="${cls}">${escapeHtml(name)}${pl && pl.is_goalie ? ' 🥅' : ''}</span>`;
-  }).join('');
-  const highlightName = opts.highlightPlayer;
+
+  const goaliesInGame = g.goalies_in_game || [];
+  const goalies = g.roster.filter(name => goaliesInGame.includes(name));
+  const skaters = g.roster.filter(name => !goaliesInGame.includes(name));
+
+  const chip = (name, isGoalie) =>
+    `<span class="roster-player${isGoalie ? ' goalie' : ''}">${escapeHtml(name)}${isGoalie ? ' 🥅' : ''}</span>`;
+
+  let rosterHtml = '';
+  if (goalies.length) {
+    rosterHtml += `<div class="roster-group-label">Maalivahdit (${goalies.length})</div>`;
+    rosterHtml += `<div class="roster-group">${goalies.map(n => chip(n, true)).join('')}</div>`;
+  }
+  if (skaters.length) {
+    rosterHtml += `<div class="roster-group-label">Kentällä (${skaters.length})</div>`;
+    rosterHtml += `<div class="roster-group">${skaters.map(n => chip(n, false)).join('')}</div>`;
+  }
+
   const rosterId = 'roster-' + g.id + (opts.uid || '');
+  const teamClass = g.color === 'SININEN' ? 'team-sininen' : 'team-valkoinen';
+  div.className = 'game-card ' + teamClass;
+
+  let positionHtml = '';
+  if (opts.highlightPlayer) {
+    const isGoalieThisGame = goaliesInGame.includes(opts.highlightPlayer);
+    positionHtml = `<span class="position-badge ${isGoalieThisGame ? 'is-goalie' : 'is-skater'}">${isGoalieThisGame ? '🥅 Maalivahtina' : '⛸️ Kentällä'}</span>`;
+  }
+
   div.innerHTML = `
     <div class="game-top">
       <div>
         <div class="game-date">${escapeHtml(g.date)}</div>
-        <div class="game-opp">${escapeHtml(g.label.split('. ').slice(1).join('. ') || g.label)}</div>
+        <div class="game-opp">${escapeHtml(g.opponent)}</div>
       </div>
       <span class="badge ${g.color}">${g.color}</span>
     </div>
     <div class="game-type">${escapeHtml(g.type)} &middot; ${g.roster.length} pelaajaa</div>
+    ${positionHtml}
     <div class="roster-toggle" data-target="${rosterId}">Näytä kokoonpano ▾</div>
     <div class="roster" id="${rosterId}">${rosterHtml}</div>
   `;
@@ -187,37 +550,37 @@ function escapeHtml(s) {
 }
 
 // ---- Player view ----
-const playerSelect = document.getElementById('playerSelect');
+const playerSelectEl = document.getElementById('playerSelect');
 DATA.players.forEach(p => {
   const opt = document.createElement('option');
   opt.value = p.name;
-  opt.textContent = p.name + (p.is_goalie ? ' (maalivahti)' : '');
-  playerSelect.appendChild(opt);
+  opt.textContent = p.name;
+  playerSelectEl.appendChild(opt);
 });
 
 function renderPlayer() {
-  const name = playerSelect.value;
+  const name = playerSelectEl.value;
   const p = DATA.players.find(x => x.name === name);
   const meta = document.getElementById('playerMeta');
   const gamesDiv = document.getElementById('playerGames');
   gamesDiv.innerHTML = '';
   if (!p) return;
 
-  const games = p.game_ids.map(id => gameById[id]).filter(Boolean).sort(dateSort);
+  const games = gamesForPlayer(name).sort(dateSort);
   meta.textContent = `${games.length} peliä yhteensä` + (p.is_goalie ? ` · maalivahtina ${p.goalie_games} pelissä (koko kausi)` : '');
 
   if (games.length === 0) {
     gamesDiv.innerHTML = '<div class="empty">Ei pelejä merkittynä.</div>';
     return;
   }
-  games.forEach(g => gamesDiv.appendChild(renderGameCard(g, {uid: '-p'})));
+  games.forEach(g => gamesDiv.appendChild(renderGameCard(g, {uid: '-p', highlightPlayer: name})));
 }
-playerSelect.addEventListener('change', renderPlayer);
+playerSelectEl.addEventListener('change', renderPlayer);
 
 // ---- Team view ----
-const teamSelect = document.getElementById('teamSelect');
+const teamSelectEl = document.getElementById('teamSelect');
 function renderTeam() {
-  const color = teamSelect.value;
+  const color = teamSelectEl.value;
   const div = document.getElementById('teamGames');
   div.innerHTML = '';
   const games = DATA.games.filter(g => g.color === color).sort(dateSort);
@@ -239,7 +602,7 @@ function renderTeam() {
     iso.forEach(g => div.appendChild(renderGameCard(g, {uid: '-t'})));
   }
 }
-teamSelect.addEventListener('change', renderTeam);
+teamSelectEl.addEventListener('change', renderTeam);
 
 // ---- Tabs ----
 document.querySelectorAll('.tab').forEach(tab => {
@@ -261,8 +624,426 @@ document.body.addEventListener('click', (e) => {
   t.textContent = target.classList.contains('show') ? 'Piilota kokoonpano ▴' : 'Näytä kokoonpano ▾';
 });
 
+// ---- Calendar export (.ics) ----
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function gameDateParts(g) {
+  const [day, month] = g.date.replace(/\.$/, '').split('.').map(Number);
+  const year = 2026; // KISA U11 syksy 2026
+  return { day, month, year };
+}
+
+function icsDate(y, m, d) {
+  return `${y}${pad(m)}${pad(d)}`;
+}
+
+function nextDay(y, m, d) {
+  const dt = new Date(y, m - 1, d + 1);
+  return { y: dt.getFullYear(), m: dt.getMonth() + 1, d: dt.getDate() };
+}
+
+function escapeIcs(s) {
+  return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+}
+
+function buildIcs(games, calName) {
+  const now = new Date();
+  const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}T${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}Z`;
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//KISA U11//Peliohjelma//FI', `X-WR-CALNAME:${escapeIcs(calName)}`];
+  games.forEach(g => {
+    const { year, month, day } = gameDateParts(g);
+    const end = nextDay(year, month, day);
+    const opponent = g.opponent;
+    const goalies = g.roster.filter(name => (g.goalies_in_game || []).includes(name));
+    const skaters = g.roster.filter(name => !goalies.includes(name));
+    const desc = `${g.type}, ${g.color}\\nMaalivahdit: ${goalies.join(', ') || '-'}\\nKentällä: ${skaters.join(', ') || '-'}`;
+    lines.push('BEGIN:VEVENT');
+    lines.push(`UID:${g.id}-${icsDate(year,month,day)}@kisa-u11`);
+    lines.push(`DTSTAMP:${stamp}`);
+    lines.push(`DTSTART;VALUE=DATE:${icsDate(year, month, day)}`);
+    lines.push(`DTEND;VALUE=DATE:${icsDate(end.y, end.m, end.d)}`);
+    lines.push(`SUMMARY:${escapeIcs('KISA U11: ' + opponent + ' (' + g.color + ')')}`);
+    lines.push(`DESCRIPTION:${escapeIcs(desc)}`);
+    lines.push('END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+async function exportIcs(games, calName, filename) {
+  if (!games.length) return;
+  const icsText = buildIcs(games, calName);
+
+  // Try the in-artifact downloads capability first (works inside claude.ai)
+  try {
+    if (window.claude && typeof window.claude.use === 'function') {
+      const downloads = await window.claude.use('downloads');
+      if (downloads) {
+        await downloads.save({ filename, data: icsText });
+        return;
+      }
+    }
+  } catch (e) { /* fall through to plain browser download */ }
+
+  // Plain browser download (works when hosted as a normal static page)
+  try {
+    const blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  } catch (e) {
+    alert('Kalenteritiedoston lataus ei onnistunut tässä selaimessa.');
+  }
+}
+
+document.getElementById('playerCalBtn').addEventListener('click', () => {
+  const name = playerSelectEl.value;
+  const p = DATA.players.find(x => x.name === name);
+  if (!p) return;
+  const games = gamesForPlayer(name).sort(dateSort);
+  exportIcs(games, `${name} - KISA U11`, `kisa_u11_${name.replace(/[^a-zA-Z0-9]/g,'_')}.ics`);
+});
+
+document.getElementById('teamCalBtn').addEventListener('click', () => {
+  const color = teamSelectEl.value;
+  const games = DATA.games.filter(g => g.color === color).sort(dateSort);
+  exportIcs(games, `${color} - KISA U11`, `kisa_u11_${color}.ics`);
+});
+
+// ==================================================================
+// ---- Admin: Firebase login, edit forms, save & export ----
+// ==================================================================
+
+function refreshAll() {
+  rebuildGameIndex();
+  DATA.games.sort(dateSort);
+  // rebuild player <select> options (names may have changed)
+  const prevPlayerVal = playerSelectEl.value;
+  playerSelectEl.innerHTML = '';
+  DATA.players.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.name;
+    opt.textContent = p.name;
+    playerSelectEl.appendChild(opt);
+  });
+  if (DATA.players.some(p => p.name === prevPlayerVal)) playerSelectEl.value = prevPlayerVal;
+
+  renderPlayer();
+  renderTeam();
+  if (document.getElementById('adminPanel').style.display !== 'none') renderAdmin();
+}
+
+function renamePlayerEverywhere(oldName, newName) {
+  if (oldName === newName) return;
+  DATA.games.forEach(g => {
+    g.roster = g.roster.map(n => n === oldName ? newName : n);
+    g.goalies_in_game = (g.goalies_in_game || []).map(n => n === oldName ? newName : n);
+  });
+}
+
+function removePlayerEverywhere(name) {
+  DATA.games.forEach(g => {
+    g.roster = g.roster.filter(n => n !== name);
+    g.goalies_in_game = (g.goalies_in_game || []).filter(n => n !== name);
+  });
+}
+
+function renderAdminPlayers() {
+  const container = document.getElementById('adminPlayers');
+  container.innerHTML = DATA.players.map((p, i) => `
+    <div class="admin-card">
+      <div class="admin-row">
+        <div class="admin-field">
+          <label>Nimi</label>
+          <input type="text" value="${escapeHtml(p.name)}" data-original-name="${escapeHtml(p.name)}" data-admin-player-field="name" data-index="${i}">
+        </div>
+        <div class="admin-field narrow">
+          <label>Ikä</label>
+          <input type="number" value="${p.age ?? ''}" data-admin-player-field="age" data-index="${i}">
+        </div>
+      </div>
+      <div class="admin-row">
+        <label class="admin-checkline">
+          <input type="checkbox" ${p.is_goalie ? 'checked' : ''} data-admin-player-field="is_goalie" data-index="${i}">
+          Maalivahtipoolissa
+        </label>
+        <div class="admin-field narrow">
+          <label>Maalivahtiotteluita (kausi)</label>
+          <input type="number" value="${p.goalie_games ?? ''}" data-admin-player-field="goalie_games" data-index="${i}">
+        </div>
+      </div>
+      <button class="admin-delete-btn" data-admin-delete-player="${i}">Poista pelaaja</button>
+    </div>
+  `).join('');
+}
+
+function renderAdminGames() {
+  const container = document.getElementById('adminGames');
+  container.innerHTML = DATA.games.map(g => {
+    const rosterChips = DATA.players.map(p => {
+      const inRoster = g.roster.includes(p.name);
+      return `<span class="admin-chip-toggle ${inRoster ? 'on' : ''}" data-admin-roster-toggle data-game-id="${g.id}" data-player="${escapeHtml(p.name)}">${inRoster ? '✓ ' : ''}${escapeHtml(p.name)}</span>`;
+    }).join('');
+    const goalieChips = g.roster.map(name => {
+      const isG = (g.goalies_in_game || []).includes(name);
+      return `<span class="admin-chip-toggle ${isG ? 'goalie-on' : ''}" data-admin-goalie-toggle data-game-id="${g.id}" data-player="${escapeHtml(name)}">${isG ? '🥅 ' : ''}${escapeHtml(name)}</span>`;
+    }).join('') || '<span style="color:var(--muted); font-size:0.85rem;">Lisää ensin pelaajia kokoonpanoon.</span>';
+
+    return `
+      <div class="admin-card">
+        <div class="admin-row">
+          <div class="admin-field narrow">
+            <label>Pvm</label>
+            <input type="text" value="${escapeHtml(g.date)}" placeholder="26.9." data-admin-game-field="date" data-game-id="${g.id}">
+          </div>
+          <div class="admin-field">
+            <label>Vastustaja / paikka</label>
+            <input type="text" value="${escapeHtml(g.opponent)}" placeholder="Ilves/Kangasala" data-admin-game-field="opponent" data-game-id="${g.id}">
+          </div>
+        </div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label>Joukkue</label>
+            <select data-admin-game-field="color" data-game-id="${g.id}">
+              <option value="SININEN" ${g.color === 'SININEN' ? 'selected' : ''}>SININEN (lohko 2a)</option>
+              <option value="VALKOINEN" ${g.color === 'VALKOINEN' ? 'selected' : ''}>VALKOINEN (lohko 2b)</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>Ottelutyyppi</label>
+            <select data-admin-game-field="type" data-game-id="${g.id}">
+              <option value="Pienpelit" ${g.type === 'Pienpelit' ? 'selected' : ''}>Pienpelit</option>
+              <option value="Iso kentta" ${g.type !== 'Pienpelit' ? 'selected' : ''}>Iso kenttä</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-subgroup-label">Kokoonpano (${g.roster.length})</div>
+        <div>${rosterChips}</div>
+        <div class="admin-subgroup-label">Maalivahdit tässä ottelussa</div>
+        <div>${goalieChips}</div>
+        <button class="admin-delete-btn" data-admin-delete-game="${g.id}">Poista ottelu</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAdmin() {
+  renderAdminPlayers();
+  renderAdminGames();
+}
+
+// -- Firebase login / logout --
+document.getElementById('adminLoginBtn').addEventListener('click', () => {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPasswordInput').value;
+  const err = document.getElementById('adminError');
+  err.textContent = '';
+  signInWithEmailAndPassword(auth, email, password).catch(() => {
+    err.textContent = 'Kirjautuminen epäonnistui: väärä sähköposti tai salasana.';
+  });
+});
+
+document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+  signOut(auth);
+});
+
+onAuthStateChanged(auth, (user) => {
+  const locked = document.getElementById('adminLocked');
+  const panel = document.getElementById('adminPanel');
+  if (user) {
+    locked.style.display = 'none';
+    panel.style.display = 'block';
+    document.getElementById('adminUserLabel').textContent = 'Kirjautuneena: ' + user.email;
+    renderAdmin();
+  } else {
+    locked.style.display = 'block';
+    panel.style.display = 'none';
+  }
+});
+
+// -- Player field edits (delegated) --
+document.getElementById('adminPlayers').addEventListener('change', (e) => {
+  const t = e.target;
+  const field = t.dataset.adminPlayerField;
+  if (!field) return;
+  const i = Number(t.dataset.index);
+  const p = DATA.players[i];
+  if (!p) return;
+  if (field === 'name') {
+    const newName = t.value.trim() || p.name;
+    const oldName = t.dataset.originalName;
+    p.name = newName;
+    renamePlayerEverywhere(oldName, newName);
+  } else if (field === 'age') {
+    p.age = t.value ? Number(t.value) : null;
+  } else if (field === 'is_goalie') {
+    p.is_goalie = t.checked;
+  } else if (field === 'goalie_games') {
+    p.goalie_games = t.value ? Number(t.value) : null;
+  }
+  refreshAll();
+});
+
+document.getElementById('adminAddPlayerBtn').addEventListener('click', () => {
+  let base = 'Uusi pelaaja';
+  let name = base;
+  let n = 1;
+  while (DATA.players.some(p => p.name === name)) { n++; name = `${base} ${n}`; }
+  DATA.players.push({ name, age: null, is_goalie: false, goalie_games: null });
+  refreshAll();
+});
+
+document.getElementById('adminPlayers').addEventListener('click', (e) => {
+  const t = e.target.closest('[data-admin-delete-player]');
+  if (!t) return;
+  const i = Number(t.dataset.adminDeletePlayer);
+  const p = DATA.players[i];
+  if (!p) return;
+  if (!confirm(`Poista pelaaja "${p.name}"? Poistuu myös kaikista otteluista.`)) return;
+  removePlayerEverywhere(p.name);
+  DATA.players.splice(i, 1);
+  refreshAll();
+});
+
+// -- Game field edits (delegated) --
+document.getElementById('adminGames').addEventListener('change', (e) => {
+  const t = e.target;
+  const field = t.dataset.adminGameField;
+  if (!field) return;
+  const g = gameById[t.dataset.gameId];
+  if (!g) return;
+  g[field] = t.value;
+  refreshAll();
+});
+
+document.getElementById('adminGames').addEventListener('click', (e) => {
+  const rosterToggle = e.target.closest('[data-admin-roster-toggle]');
+  if (rosterToggle) {
+    const g = gameById[rosterToggle.dataset.gameId];
+    const name = rosterToggle.dataset.player;
+    if (g.roster.includes(name)) {
+      g.roster = g.roster.filter(n => n !== name);
+      g.goalies_in_game = (g.goalies_in_game || []).filter(n => n !== name);
+    } else {
+      g.roster.push(name);
+    }
+    refreshAll();
+    return;
+  }
+  const goalieToggle = e.target.closest('[data-admin-goalie-toggle]');
+  if (goalieToggle) {
+    const g = gameById[goalieToggle.dataset.gameId];
+    const name = goalieToggle.dataset.player;
+    g.goalies_in_game = g.goalies_in_game || [];
+    if (g.goalies_in_game.includes(name)) {
+      g.goalies_in_game = g.goalies_in_game.filter(n => n !== name);
+    } else {
+      g.goalies_in_game.push(name);
+    }
+    refreshAll();
+    return;
+  }
+  const del = e.target.closest('[data-admin-delete-game]');
+  if (del) {
+    const id = del.dataset.adminDeleteGame;
+    const g = gameById[id];
+    if (!g) return;
+    if (!confirm(`Poista ottelu ${g.date} ${g.opponent}?`)) return;
+    DATA.games = DATA.games.filter(x => x.id !== id);
+    delete gameById[id];
+    refreshAll();
+  }
+});
+
+document.getElementById('adminAddGameBtn').addEventListener('click', () => {
+  const id = 'g' + Date.now();
+  const g = { id, date: '', opponent: '', color: 'SININEN', type: 'Pienpelit', roster: [], goalies_in_game: [] };
+  DATA.games.push(g);
+  gameById[id] = g;
+  refreshAll();
+});
+
+// -- Export updated standalone file --
+document.getElementById('adminExportBtn').addEventListener('click', async () => {
+  const newDataJson = JSON.stringify(DATA);
+  const marker = 'const DATA = ';
+  const idx = PRISTINE_HTML.indexOf(marker);
+  if (idx === -1) {
+    alert('Vientiä ei voitu tehdä: alkuperäistä sivupohjaa ei löytynyt.');
+    return;
+  }
+  const afterMarker = idx + marker.length;
+  const endIdx = PRISTINE_HTML.indexOf('\n;', afterMarker);
+  if (endIdx === -1) {
+    alert('Vientiä ei voitu tehdä: alkuperäistä sivupohjaa ei löytynyt.');
+    return;
+  }
+  const newHtml = PRISTINE_HTML.slice(0, afterMarker) + newDataJson + PRISTINE_HTML.slice(endIdx);
+  const filename = 'kisa_u11.html';
+
+  try {
+    if (window.claude && typeof window.claude.use === 'function') {
+      const downloads = await window.claude.use('downloads');
+      if (downloads) {
+        await downloads.save({ filename, data: newHtml });
+        return;
+      }
+    }
+  } catch (e) { /* fall through */ }
+
+  try {
+    const blob = new Blob([newHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  } catch (e) {
+    alert('Tiedoston lataus ei onnistunut tässä selaimessa.');
+  }
+});
+
 renderPlayer();
 renderTeam();
+
+// -- Save current edits to Firestore (shared, live for everyone) --
+document.getElementById('adminSaveBtn').addEventListener('click', async () => {
+  const status = document.getElementById('adminSaveStatus');
+  status.style.color = 'var(--muted)';
+  status.textContent = 'Tallennetaan...';
+  try {
+    await setDoc(DATA_DOC_REF, {
+      players: DATA.players,
+      games: DATA.games,
+      updatedAt: new Date().toISOString()
+    });
+    status.style.color = '#2f8f4e';
+    status.textContent = 'Tallennettu klo ' + new Date().toLocaleTimeString('fi-FI') + '.';
+  } catch (e) {
+    status.style.color = '#c0304a';
+    status.textContent = 'Tallennus epäonnistui: ' + (e && e.message ? e.message : e);
+  }
+});
+
+// -- Live subscription: everyone sees the latest saved data automatically --
+onSnapshot(DATA_DOC_REF, (snap) => {
+  if (!snap.exists()) return;
+  const remote = snap.data();
+  if (!remote || !Array.isArray(remote.players) || !Array.isArray(remote.games)) return;
+  DATA.players = remote.players;
+  DATA.games = remote.games;
+  refreshAll();
+}, (err) => {
+  console.error('Firestore-kuuntelu epäonnistui:', err);
+});
 </script>
 </body>
 </html>
