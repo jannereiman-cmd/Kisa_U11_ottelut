@@ -445,6 +445,35 @@
     cursor: pointer;
     padding: 4px 0;
   }
+  /* ---- Kausi: vertical season timeline (login required) ---- */
+  .season-themes { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 18px; }
+  .season-themes h3 { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; margin: 0 0 8px; color: var(--text); }
+  .season-themes ul { margin: 0; padding-left: 18px; font-size: 0.86rem; line-height: 1.45; color: var(--muted); }
+  .season-themes ul strong { color: var(--text); }
+  .season-themes .motto { margin-top: 10px; font-weight: 700; font-size: 0.82rem; color: var(--ice-blue); }
+  .tl { position: relative; padding-left: 26px; }
+  .tl::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-month { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 18px 0 8px -26px; padding-left: 26px; }
+  .tl-block { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 14px; margin-bottom: 12px; }
+  .tl-block::before { content: ""; position: absolute; left: -24px; top: 16px; width: 12px; height: 12px; border-radius: 50%; background: var(--ice-blue); border: 2px solid var(--bg); }
+  .tl-block.special::before { background: var(--gold); }
+  .tl-block.past { opacity: 0.6; }
+  .tl-block.current { border-color: var(--ice-blue); box-shadow: 0 0 0 2px var(--ice-blue), var(--shadow); opacity: 1; }
+  .tl-block.current::before { width: 16px; height: 16px; left: -26px; top: 14px; }
+  .tl-range { font-size: 0.75rem; font-weight: 600; color: var(--muted); }
+  .tl-title { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--text); margin: 2px 0 4px; line-height: 1.25; }
+  .tl-focus { font-size: 0.84rem; color: var(--muted); line-height: 1.4; }
+  .tl-week { border-top: 1px dashed var(--border); margin-top: 8px; padding-top: 7px; font-size: 0.84rem; }
+  .tl-week.current .tl-wk { color: var(--ice-blue); }
+  .tl-wk { font-weight: 700; color: var(--text); }
+  .tl-wk .now { display: inline-block; margin-left: 6px; font-size: 0.7rem; font-weight: 700; color: #fff; background: var(--ice-blue); border-radius: 6px; padding: 1px 6px; vertical-align: 1px; }
+  .tl-note { display: inline-block; margin: 4px 6px 0 0; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: var(--gold-light); color: var(--text); }
+  .tl-game { display: flex; gap: 8px; align-items: baseline; margin-top: 4px; color: var(--text); }
+  .tl-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; transform: translateY(1px); }
+  .tl-dot.s { background: var(--ice-blue); }
+  .tl-dot.v { background: var(--card); border: 2px solid var(--silver); }
+  .tl-game.prog { color: var(--muted); }
+  .season-locked-btn { margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -461,6 +490,7 @@
 <div class="tabs">
   <div class="tab active" data-tab="player">Pelaajan mukaan</div>
   <div class="tab" data-tab="team">Joukkueen mukaan</div>
+  <div class="tab" data-tab="season" style="display:none">Kausi</div>
   <div class="tab" data-tab="admin">Ylläpito</div>
 </div>
 
@@ -483,6 +513,27 @@
   </select>
   <div class="cal-btn" id="teamCalBtn">📅 Lisää kalenteriin (.ics)</div>
   <div id="teamGames"></div>
+</div>
+
+<div class="panel" id="panel-season">
+  <div id="seasonLocked">
+    <div class="admin-note">Kauden vuosikello (harjoitusteemat, pelit ja lomat) näkyy kirjautuneille valmentajille.</div>
+    <div class="cal-btn season-locked-btn" id="seasonLoginJump">🔑 Kirjaudu Ylläpito-välilehdellä</div>
+  </div>
+  <div id="seasonContent" style="display:none">
+    <div class="season-themes">
+      <h3>KAUDEN PÄÄTEEMAT</h3>
+      <ul>
+        <li><strong>Luistelu:</strong> jarruttaminen, suunnanvaihto, terävä liikkeellelähtö</li>
+        <li><strong>Täysiä &amp; kamppaile:</strong> kiekolliseen kiinni, älä luovuta, tahdo voittaa kiekko</li>
+        <li><strong>Syöttäminen:</strong> syöttöpaikan hakeminen ja haltuunotto, liikkeestä liikkeeseen</li>
+        <li><strong>Avaaminen – keskialue – maalille:</strong> laitaan liikkeeseen, kiekko kärkeen, maalintekosektoriin</li>
+        <li><strong>Pelitilanteen tunnistaminen:</strong> milloin apuun, milloin maalille, milloin varmistamaan</li>
+      </ul>
+      <div class="motto">Kehity ja pidä kivaa! Nauti lajista, joukkueesta ja kavereista!</div>
+    </div>
+    <div class="tl" id="seasonTimeline"></div>
+  </div>
 </div>
 
 <div class="panel" id="panel-admin">
@@ -794,6 +845,8 @@ function activateTab(tabName) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   tabEl.classList.add('active');
   panelEl.classList.add('active');
+  const playedToggle = document.querySelector('.show-played-toggle');
+  if (playedToggle) playedToggle.style.display = tabName === 'season' ? 'none' : '';
   return true;
 }
 document.querySelectorAll('.tab').forEach(tab => {
@@ -967,6 +1020,7 @@ function refreshAll() {
 
   renderPlayer();
   renderTeam();
+  if (typeof renderSeason === 'function') renderSeason();
   if (document.getElementById('adminPanel').style.display !== 'none') renderAdmin();
 }
 
@@ -1355,6 +1409,105 @@ onSnapshot(DATA_DOC_REF, (snap) => {
   console.error('Firestore-kuuntelu epäonnistui:', err);
   refreshAll();
 });
+
+// ==================================================================
+// ---- Kausi: vertical season timeline (visible when logged in) ----
+// ==================================================================
+var SEASON = [{"title": "Paluu jäälle", "focus": ["Kauden avaus / takaisin lajiin", "Liike kiekon kanssa"], "weeks": [{"wk": 32, "mon": "2026-08-03", "note": null, "prog": []}, {"wk": 33, "mon": "2026-08-10", "note": null, "prog": ["La 15.8 Harjoituspeli LeKi Valkoinen"]}, {"wk": 34, "mon": "2026-08-17", "note": null, "prog": []}], "special": false}, {"title": "Syöttäminen", "focus": ["Syöttäminen & kiilaus"], "weeks": [{"wk": 35, "mon": "2026-08-24", "note": null, "prog": ["Su 30.8 Harjoituspelit KPK Sininen", "Su 30.8 Harjoituspelit KPK Valkoinen"]}, {"wk": 36, "mon": "2026-08-31", "note": null, "prog": ["Su 6.9. LeKi-turnaus Sininen"]}, {"wk": 37, "mon": "2026-09-07", "note": null, "prog": []}], "special": false}, {"title": "Paluu pienpeleihin", "focus": ["Pienpelit"], "weeks": [{"wk": 38, "mon": "2026-09-14", "note": null, "prog": ["Ma 14.9. Harjoituspeli Uplakers Sininen", "To 17.9. Harjoituspeli Uplakers Valkoinen"]}, {"wk": 39, "mon": "2026-09-21", "note": "Pienen kentän pelit alkaa", "prog": ["La 26.9. Sarjapelit Ilves Sininen", "Su 27.9. Sarjapelit Tappara valkoinen"]}], "special": false}, {"title": "Reagointia peleissä nähtyyn", "focus": ["Maalintekosektoriin"], "weeks": [{"wk": 40, "mon": "2026-09-28", "note": null, "prog": ["Su 4.10. Sarjapelit Uplakers Sininen", "Su 4.10. Sarjapelit Uplakers Valkoinen"]}], "special": false}, {"title": "Puolustaminen", "focus": ["1vs1 puolustaminen", "1vs1 puolustaminen + peliä"], "weeks": [{"wk": 41, "mon": "2026-10-05", "note": null, "prog": []}, {"wk": 42, "mon": "2026-10-12", "note": "Syysloma", "prog": []}, {"wk": 43, "mon": "2026-10-19", "note": null, "prog": ["Su 25.10. Sarjapelit Sisu Sininen"]}], "special": false}, {"title": "Luistelen, hallitsen kiekkoa ja uskallan haastaa", "focus": ["Kiekon kuljettaminen eri puolilla vartaloa", "Rytminmuutos", "Harhautus", "Kiekon suojaaminen", "Pelitaito: vastustajan haastaminen"], "weeks": [{"wk": 44, "mon": "2026-10-26", "note": null, "prog": ["Su 1.11. Sarjapelit LeKi Valkoinen"]}, {"wk": 45, "mon": "2026-11-02", "note": null, "prog": ["La 7.11. Sarjapelit Vaps Valkoinen", "Su 8.11. Sarjapelit Tappara Sininen"]}, {"wk": 46, "mon": "2026-11-09", "note": null, "prog": ["Su 15.11. Sarjapelit HPK Sininen", "Su 15.11. Sarjapelit Pelicans Valkoinen"]}], "special": false}, {"title": "Maalinteko", "focus": ["Maalinteko & maalintekosektoriin", "1vs0", "1vs1", "2vs2"], "weeks": [{"wk": 47, "mon": "2026-11-16", "note": null, "prog": ["La 21.11. Sarjapelit Hokkarit Valkoinen", "Su 22.11. Sarjapelit Pelicans Sininen"]}, {"wk": 48, "mon": "2026-11-23", "note": null, "prog": ["La 28.11. Sarjapelit Pelicans Valkoinen", "Su 29.11. Sarjapelit Ilves Sininen"]}, {"wk": 49, "mon": "2026-11-30", "note": null, "prog": ["La 5.12. Sarjapelit Ahmat Valkoinen", "Su 6.12. Sarjapelit Pelicans Sininen"]}], "special": false}, {"title": "Suunnanmuutos ja kaarteet", "focus": ["Suunnanmuutos ja terävät lähdöt", "Jarrutukset molemmille puolille"], "weeks": [{"wk": 50, "mon": "2026-12-07", "note": null, "prog": ["Su 13.12 Sarjapelit Ruoska Valkoinen", "Su 13.12 Sarjapelit Uplakers Sininen"]}, {"wk": 51, "mon": "2026-12-14", "note": null, "prog": []}], "special": false}, {"title": "Jouluspecial", "focus": [], "weeks": [{"wk": 52, "mon": "2026-12-21", "note": "Jouluviikko", "prog": []}, {"wk": 53, "mon": "2026-12-28", "note": "Välipäiväviikko", "prog": []}], "special": true}, {"title": "Herkkujen sulatusväännöt", "focus": ["Kamppailu"], "weeks": [{"wk": 1, "mon": "2027-01-04", "note": "Välipäiväviikko", "prog": ["La 9.1. Sarjapelit KooVee Sininen", "Su 10.1. Sarjapelit Fortuna Valkoinen"]}], "special": false}, {"title": "Avaaminen", "focus": ["Avaaminen & omista lähtö"], "weeks": [{"wk": 2, "mon": "2027-01-11", "note": null, "prog": ["La 16.1 Sarjapelit HPK Valkoinen", "Su 17.1. Sarjapelit Ilves Sininen"]}, {"wk": 3, "mon": "2027-01-18", "note": null, "prog": ["LA 23.1. Sarjapelit Ilves Sininen", "LA 23.1. Sarjapelit KooVee Valkoinen", "Su 24.1. Sarjapelit Tappara Sininen"]}], "special": false}, {"title": "Keskialueen ylitys", "focus": [], "weeks": [{"wk": 4, "mon": "2027-01-25", "note": null, "prog": ["Su 31.1. Sarjapelit LeKi Sininen", "Su 31.1. Sarjapelit Pelicans Valkoinen"]}, {"wk": 5, "mon": "2027-02-01", "note": null, "prog": ["La 6.2. Sarjapelit HPK Sininen", "Su 7.2. Sarjapelit Pelicans Sininen"]}], "special": false}, {"title": "Mitä tapahtuu hyökkäyssinisen jälkeen", "focus": ["Hyökkäyspää & maalille"], "weeks": [{"wk": 6, "mon": "2027-02-08", "note": null, "prog": ["La 13.2. Sarjapelit Ilves Valkoinen", "La 13.2. Sarjapelit LeKi Sininen", "Su 14.2. Sarjapelit HC Nokia Valkoinen"]}, {"wk": 7, "mon": "2027-02-15", "note": null, "prog": ["Su 21.2. Sarjapelit HC Nokia Sininen", "Su 21.2. Sarjapelit KPK Valkoinen"]}], "special": false}, {"title": "Avaaminen-keskialue-hyökkäysalue kertaus", "focus": ["Peliä - kertaus 1-2-3"], "weeks": [{"wk": 8, "mon": "2027-02-22", "note": null, "prog": []}], "special": false}, {"title": "Hiihtolomaspecial", "focus": [], "weeks": [{"wk": 9, "mon": "2027-03-01", "note": "Hiihtoloma", "prog": []}], "special": true}, {"title": "Syötä ja liiku, terävät suunnanvaihdot", "focus": ["Syötä ja liiku"], "weeks": [{"wk": 10, "mon": "2027-03-08", "note": null, "prog": ["Su 14.3. Sarjapelit Ilves Valkoinen", "Su 14.3. Sarjapelit SiSu Sininen"]}, {"wk": 11, "mon": "2027-03-15", "note": null, "prog": ["La 20.3. Sarjapelit Pelicans Sininen", "La 20.3. Sarjapelit SiSu Valkoinen", "Su 21.3. Sarjapelit HPK Sininen"]}], "special": false}, {"title": "Turnaukseen valmistavaa", "focus": ["Pelipaikat&tehtävät ja kertaus 1-2-3"], "weeks": [{"wk": 12, "mon": "2027-03-22", "note": "Vierumäki-turnaus 27.–29.3.", "prog": []}], "special": false}, {"title": "”Katso ja mieti ennen kuin saat kiekon”", "focus": ["Havainnointi ja valinnat"], "weeks": [{"wk": 13, "mon": "2027-03-29", "note": null, "prog": []}, {"wk": 14, "mon": "2027-04-05", "note": null, "prog": []}], "special": false}, {"title": "Laukominen", "focus": [], "weeks": [{"wk": 15, "mon": "2027-04-12", "note": null, "prog": []}, {"wk": 16, "mon": "2027-04-19", "note": null, "prog": []}], "special": false}, {"title": "Season finale", "focus": ["Taitokisat & mittaukset"], "weeks": [{"wk": 17, "mon": "2027-04-26", "note": null, "prog": []}], "special": true}];
+const FI_DAYS = ['Su','Ma','Ti','Ke','To','Pe','La'];
+const FI_MONTHS = ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu','Heinäkuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'];
+var seasonUser = null;
+var seasonScrolled = false;
+
+function isoToDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function fmtDM(d) { return d.getDate() + '.' + (d.getMonth() + 1) + '.'; }
+function gameJsDate(g) { const p = gameDateParts(g); return new Date(p.year, p.month - 1, p.day); }
+
+function renderSeason() {
+  const el = document.getElementById('seasonTimeline');
+  if (!el || !seasonUser) return;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  let html = '';
+  let lastMonth = -1;
+  SEASON.forEach(block => {
+    const start = isoToDate(block.weeks[0].mon);
+    const end = addDays(isoToDate(block.weeks[block.weeks.length - 1].mon), 6);
+    if (start.getMonth() !== lastMonth) {
+      lastMonth = start.getMonth();
+      html += `<div class="tl-month">${FI_MONTHS[lastMonth]} ${start.getFullYear()}</div>`;
+    }
+    const isCurrent = today >= start && today <= end;
+    const isPast = today > end;
+    const wkLabel = block.weeks.length > 1
+      ? `Vko ${block.weeks[0].wk}–${block.weeks[block.weeks.length - 1].wk}`
+      : `Vko ${block.weeks[0].wk}`;
+    let weeksHtml = '';
+    block.weeks.forEach(w => {
+      const mon = isoToDate(w.mon);
+      const sun = addDays(mon, 6);
+      const wkNow = today >= mon && today <= sun;
+      const live = DATA.games.filter(g => { const d = gameJsDate(g); return d >= mon && d <= sun; });
+      let gamesHtml = '';
+      if (live.length) {
+        gamesHtml = live.map(g => {
+          const d = gameJsDate(g);
+          const t = formatTimes(g);
+          const cls = g.color === 'SININEN' ? 's' : 'v';
+          return `<div class="tl-game"><span class="tl-dot ${cls}"></span><span><strong>${FI_DAYS[d.getDay()]} ${fmtDM(d)}</strong> ${escapeHtml(g.opponent || '')} · ${g.color === 'SININEN' ? 'Sininen' : 'Valkoinen'}${t ? ' · ' + escapeHtml(t) : ''}</span></div>`;
+        }).join('');
+      } else if (w.prog.length) {
+        gamesHtml = w.prog.map(p => {
+          const cls = /sininen/i.test(p) ? 's' : 'v';
+          return `<div class="tl-game prog"><span class="tl-dot ${cls}"></span><span>${escapeHtml(p)}</span></div>`;
+        }).join('');
+      }
+      const noteHtml = w.note ? `<span class="tl-note">${escapeHtml(w.note)}</span>` : '';
+      weeksHtml += `<div class="tl-week${wkNow ? ' current' : ''}" ${wkNow ? 'id="seasonNow"' : ''}>
+          <div class="tl-wk">Vko ${w.wk} <span style="font-weight:500;color:var(--muted)">${fmtDM(mon)}–${fmtDM(sun)}</span>${wkNow ? '<span class="now">Nyt</span>' : ''}</div>
+          ${noteHtml}${gamesHtml}
+        </div>`;
+    });
+    const focusHtml = block.focus.length ? `<div class="tl-focus">${block.focus.map(escapeHtml).join(' · ')}</div>` : '';
+    html += `<div class="tl-block${block.special ? ' special' : ''}${isCurrent ? ' current' : ''}${isPast ? ' past' : ''}">
+        <div class="tl-range">${wkLabel} · ${fmtDM(start)}–${fmtDM(end)}</div>
+        <div class="tl-title">${escapeHtml(block.title)}</div>
+        ${focusHtml}${weeksHtml}
+      </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function scrollSeasonToNow() {
+  if (seasonScrolled) return;
+  const now = document.getElementById('seasonNow');
+  if (now && document.getElementById('panel-season').classList.contains('active')) {
+    seasonScrolled = true;
+    now.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+}
+
+function setSeasonUser(user) {
+  seasonUser = user;
+  const seasonTab = document.querySelector('.tab[data-tab="season"]');
+  seasonTab.style.display = user ? '' : 'none';
+  if (!user && seasonTab.classList.contains('active')) activateTab('player');
+  document.getElementById('seasonLocked').style.display = user ? 'none' : 'block';
+  document.getElementById('seasonContent').style.display = user ? 'block' : 'none';
+  if (user) { renderSeason(); scrollSeasonToNow(); }
+  else { document.getElementById('seasonTimeline').innerHTML = ''; seasonScrolled = false; }
+}
+
+document.getElementById('seasonLoginJump').addEventListener('click', () => {
+  activateTab('admin');
+  try { localStorage.setItem(LAST_TAB_KEY, 'admin'); } catch (e) {}
+  document.getElementById('adminEmail').focus();
+});
+document.querySelector('.tab[data-tab="season"]').addEventListener('click', () => {
+  if (seasonUser) scrollSeasonToNow();
+});
+
+onAuthStateChanged(auth, setSeasonUser);
 </script>
 </body>
 </html>
