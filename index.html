@@ -474,6 +474,7 @@
   .tl-dot.v { background: var(--card); border: 2px solid var(--silver); }
   .tl-game.prog { color: var(--muted); }
   .season-locked-btn { margin-top: 10px; }
+  .tl-past-btn { display: block; width: 100%; margin: 0 0 12px; padding: 10px 12px; font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--ice-blue); background: var(--ice-blue-light); border: 1px dashed var(--ice-blue); border-radius: 10px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -532,6 +533,7 @@
       </ul>
       <div class="motto">Kehity ja pidä kivaa! Nauti lajista, joukkueesta ja kavereista!</div>
     </div>
+    <button type="button" class="tl-past-btn" id="seasonPastBtn" style="display:none"></button>
     <div class="tl" id="seasonTimeline"></div>
   </div>
 </div>
@@ -1418,6 +1420,7 @@ const FI_DAYS = ['Su','Ma','Ti','Ke','To','Pe','La'];
 const FI_MONTHS = ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu','Heinäkuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'];
 var seasonUser = null;
 var seasonScrolled = false;
+var seasonShowPast = false;
 
 function isoToDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
 function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
@@ -1430,9 +1433,11 @@ function renderSeason() {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   let html = '';
   let lastMonth = -1;
+  let pastCount = 0;
   SEASON.forEach(block => {
     const start = isoToDate(block.weeks[0].mon);
     const end = addDays(isoToDate(block.weeks[block.weeks.length - 1].mon), 6);
+    if (today > end) { pastCount++; if (!seasonShowPast) return; }
     if (start.getMonth() !== lastMonth) {
       lastMonth = start.getMonth();
       html += `<div class="tl-month">${FI_MONTHS[lastMonth]} ${start.getFullYear()}</div>`;
@@ -1476,6 +1481,9 @@ function renderSeason() {
       </div>`;
   });
   el.innerHTML = html;
+  const pastBtn = document.getElementById('seasonPastBtn');
+  pastBtn.style.display = pastCount ? 'block' : 'none';
+  pastBtn.textContent = seasonShowPast ? 'Piilota menneet ▴' : `Näytä menneet (${pastCount}) ▾`;
 }
 
 function scrollSeasonToNow() {
@@ -1498,6 +1506,10 @@ function setSeasonUser(user) {
   else { document.getElementById('seasonTimeline').innerHTML = ''; seasonScrolled = false; }
 }
 
+document.getElementById('seasonPastBtn').addEventListener('click', () => {
+  seasonShowPast = !seasonShowPast;
+  renderSeason();
+});
 document.getElementById('seasonLoginJump').addEventListener('click', () => {
   activateTab('admin');
   try { localStorage.setItem(LAST_TAB_KEY, 'admin'); } catch (e) {}
