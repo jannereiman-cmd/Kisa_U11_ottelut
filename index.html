@@ -478,6 +478,23 @@
   .tl-empty { color: var(--muted); }
   .season-locked-btn { margin-top: 10px; }
   .tl-past-btn { margin: 0 0 4px; padding: 6px 0; font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--ice-blue); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  /* ---- Desktop: use the wider screen ---- */
+  @media (min-width: 900px) {
+    .wrap, .hero-inner { max-width: 1120px; }
+    .wrap { padding: 0 32px; }
+    .tabs { max-width: 640px; }
+    select, #panel-admin { max-width: 640px; }
+    #playerGames, #teamGames { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; align-items: start; }
+    #playerGames .game-card, #teamGames .game-card { margin-bottom: 0; }
+    #playerGames > :not(.game-card), #teamGames > :not(.game-card) { grid-column: 1 / -1; }
+    #seasonContent { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 0 48px; align-items: start; }
+    #seasonContent .season-themes { grid-column: 1; grid-row: 1 / span 2; position: sticky; top: 16px; margin-top: 22px; }
+    #seasonContent .season-themes dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    #seasonContent .season-themes dd { margin-bottom: 8px; }
+    #seasonPastBtn, #seasonTimeline { grid-column: 2; }
+    .tl-block { grid-template-columns: 5rem minmax(0, 1fr); gap: 0 20px; }
+    .tl-block.current { margin: 0 -14px; padding-left: 14px; padding-right: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -1509,7 +1526,7 @@ function setSeasonUser(user) {
   seasonTab.style.display = user ? '' : 'none';
   if (!user && seasonTab.classList.contains('active')) activateTab('player');
   document.getElementById('seasonLocked').style.display = user ? 'none' : 'block';
-  document.getElementById('seasonContent').style.display = user ? 'block' : 'none';
+  document.getElementById('seasonContent').style.display = user ? '' : 'none';
   if (user) { renderSeason(); scrollSeasonToNow(); }
   else { document.getElementById('seasonTimeline').innerHTML = ''; seasonScrolled = false; }
 }
